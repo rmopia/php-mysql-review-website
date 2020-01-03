@@ -83,7 +83,7 @@
 	if($response){
 		
 		if($type=="movie"){
-			echo "issa movie";
+			
 		}
 		else if($type=="tv"){
 			
@@ -95,6 +95,39 @@
 ?>
 <div class="container">
 	<h3>Recent Reviews</h3>
+	<?php
+		$check_query = "SELECT * FROM reviews WHERE mid=".$id;
+		$check_response = mysqli_query($conn, $check_query);
+		if($check_response){
+			while($row = mysqli_fetch_array($check_response)){
+				$check = $row['mid'];
+			}
+		}
+		
+		if(empty($check)){
+			echo "<b>Currently no reviews available! </b>";
+		}
+		else{
+			$rvw_query = "SELECT * FROM reviews WHERE mid=".$id;
+		$rvw_response = mysqli_query($conn, $rvw_query);
+		
+			if($rvw_response){
+				echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
+				<th scope="col">Username</th>
+				<th scope="col">Score</th>
+				<th scope="col">Review</th>
+				<th scope="col">Date Posted</th></tr></thead>';
+				while($row = mysqli_fetch_array($rvw_response)){
+					echo '<tr><td align="left">' . $row['username'] . '</td> 
+					<td align="left">' . $row['score'] . '</td>
+					<td align="left">' . $row['review'] . '</td>
+					<td align="left">' . $row['date_posted'] . '</td><td align="left">';
+				}
+				echo '</tr></table></div>';
+			}
+		}
+		
+	?>
 </div>
 <div class="container">
 	<div class="row">
