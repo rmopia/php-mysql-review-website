@@ -46,7 +46,7 @@
 			<th scope="col">mid</th>
 			<th scope="col">Year</th>
 			<th scope="col">Seasons</th>
-			<th scope="col">Episodes</th>
+			<th scope="col">Episodes (total)</th>
 			<th scope="col">Age Rating</th>
 			<th scope="col">Genres</th>
 			<th scope="col">Director</th></tr></thead>';

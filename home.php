@@ -23,7 +23,11 @@
 </nav>
 <div class="container">
 	<h1>Home</h1>
+	<div class="embed-responsive embed-responsive-16by9">
+		<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/3iXeAwsGhV0" allowfullscreen></iframe>
+	</div>
 </div>
+<p></p>
 <?php
 		$servername = "localhost";
 		$username = "root";
@@ -32,10 +36,7 @@
 		
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
-		
-		$sql = "SELECT portrait FROM reviewers WHERE username='rmoo'";
-		$sth = mysqli_query($conn, $sql);
-		$result = mysqli_fetch_array($sth);
-		echo '<img src="data:portrait/jpeg;base64,'.base64_encode( $result['portrait'] ).'"/>';
-		// testing blob conversion to image
+?>
+<?php
+		mysqli_close($conn);
 ?>
