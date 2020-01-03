@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Review It - Home</title>
+  <title>Review It</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -22,20 +22,5 @@
   </div>
 </nav>
 <div class="container">
-	<h1>Home</h1>
+	<h1>Details</h1>
 </div>
-<?php
-		$servername = "localhost";
-		$username = "root";
-		$password = "pwdpwd";
-		$dbname = "review_site";
-		
-		$conn = new mysqli($servername, $username, $password, $dbname);
-		$conn->select_db($dbname) or die("Unable to connect to database."); 
-		
-		$sql = "SELECT portrait FROM reviewers WHERE username='rmoo'";
-		$sth = mysqli_query($conn, $sql);
-		$result = mysqli_fetch_array($sth);
-		echo '<img src="data:portrait/jpeg;base64,'.base64_encode( $result['portrait'] ).'"/>';
-		// testing blob conversion to image
-?>
