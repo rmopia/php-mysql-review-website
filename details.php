@@ -32,8 +32,6 @@
 
 	if(isset($_GET['id'])){ // if hyperlink is clicked, mid is grabbed
 		$id = $_GET['id'];
-		$query='SELECT * FROM media WHERE mid='.$id;
-		$response = mysqli_query($conn, $query);
 		
 		$find_type_query = "SELECT * FROM media WHERE mid=".$id;
 			$type_response = mysqli_query($conn, $find_type_query);
@@ -46,12 +44,39 @@
 					$img = $row['image'];
 				}
 			}
-	}	
+	}
+
+	$genres_query = "SELECT *,
+		GROUP_CONCAT(g.genre) as genres FROM media m INNER JOIN media_genres mg ON m.mid=mg.mid 
+		INNER JOIN genres g ON g.gid=mg.gid
+		WHERE m.mid='".$id."'";
+	$response = mysqli_query($conn, $genres_query);
+	if($response){
+		while($row = mysqli_fetch_array($response)){
+			$genres = $row['genres'];
+			$genres_str = str_replace(",", ", ", $genres);
+		}
+	}
+	
+	$actors_query = "SELECT *,
+		GROUP_CONCAT(a.actor) as actors FROM media m INNER JOIN media_actors ma ON m.mid=ma.mid 
+		INNER JOIN actors a ON a.aid=ma.aid
+		WHERE m.mid='".$id."'";
+	$response = mysqli_query($conn, $actors_query);
+	if($response){
+		while($row = mysqli_fetch_array($response)){
+			$actors = $row['actors'];
+			$actors_str = str_replace(",", ", ", $actors);
+		}
+	}
+	
 ?>
 <title>Review It - <?php echo $title ?> </title>
 <div class="container">
 	<?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'"/>'; ?>
 	<h1><?php echo $title . ' (' . $year . ')'?></h1>
+	<h4><?php echo 'Genre(s): ' . $genres_str ?></h4>
+	<h4><?php echo 'Actors/Actresses: ' . $actors_str ?></h4>
 	<h6><?php echo $desc ?></h6>
 </div>
 <?php
@@ -68,6 +93,9 @@
 		}
 	}
 ?>
+<div class="container">
+	<h3>Recent Reviews</h3>
+</div>
 <div class="container">
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
