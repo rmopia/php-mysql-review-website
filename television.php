@@ -23,6 +23,7 @@
 </nav>
 <div class="container">
 	<h1>TV</h1>
+	<a href="addmedia.php"><b>Add A Show</b></a>
 </div>
 
 <?php

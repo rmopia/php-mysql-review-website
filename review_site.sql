@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2020 at 03:56 AM
+-- Generation Time: Jan 04, 2020 at 11:17 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -200,14 +200,6 @@ CREATE TABLE `reviews` (
   `review` text DEFAULT NULL,
   `date_posted` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `reviews`
---
-
-INSERT INTO `reviews` (`mid`, `username`, `score`, `review`, `date_posted`) VALUES
-(1, 'movieguy1', 7, 'fun movie with the family. I love yoda', '2020-01-01'),
-(1, 'rmoo', 7, 'It was pretty good', '2020-01-03');
 
 --
 -- Indexes for dumped tables

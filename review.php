@@ -31,7 +31,7 @@
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
 		if(isset($_POST['review'])){
-			$username = "movieguy1"; // change later to be dynamic
+			$username = "rmoo"; // change later to be dynamic
 			$title = $_POST['title'];
 			$mid = $_POST['mid'];
 		}
@@ -46,7 +46,6 @@
 			<form action="details.php?id=<?php echo $mid ?>" method="post">
 				<h6>Thoughts?</h6>
 				<textarea class="form-control" type="text" name="review-text" value="" rows="6" cols="40"></textarea>
-				<h6>Score</h6>
 				<div class="form-group">
 				  <label for="sc">Score:</label>
 				  <select class="form-control" name="score">
@@ -66,8 +65,9 @@
 				<input type="hidden" name="title" value="<?php echo $title ?>">
 				<input type="hidden" name="mid" value="<?php echo $mid ?>">
 				<p></p>
-				<p>
-				<input type="submit" name="review-submit" class="btn btn-primary" value="Submit"></p>
+				<p></p>
+				<input type="submit" name="review-submit" class="btn btn-primary" value="Add">
+				<input type="submit" name="review-update" class="btn btn-primary" value="Update">
 			</form>
 		</div>
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

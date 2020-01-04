@@ -47,20 +47,53 @@
 	}
 	
 	if(isset($_POST['review-submit'])){
-			$username = "rmoo"; // change later to be dynamic
-			//$r_title = $_POST['title'];
-			$r_mid = $_POST['mid'];
-			$text = $_POST['review-text'];
-			$score = $_POST['score'];
-			
+		$username = "rmoo"; // change later to be dynamic
+		$r_mid = $_POST['mid'];
+		$text = $_POST['review-text'];
+		$score = $_POST['score'];
+		
+		if(empty($text)){
+			echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+		}
+		else{
 			$insert_query = "INSERT INTO reviews (mid, username, score, review, date_posted) 
-			VALUES (?,?,?,?,CURDATE())"; //TODO: Integrate for update query as well
-			
+			VALUES (?,?,?,?,CURDATE())"; 
+		
 			$insert = mysqli_prepare($conn, $insert_query);
 			mysqli_stmt_bind_param($insert, "isis", $r_mid, $username, $score, $text);
 			mysqli_stmt_execute($insert);
-		
 		}
+	}
+	else if(isset($_POST['review-update'])){
+		$username = "rmoo"; // change later to be dynamic
+		$r_mid = $_POST['mid'];
+		$text = $_POST['review-text'];
+		$score = $_POST['score'];
+		
+		if(empty($text)){
+			echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+		}
+		else{
+			$update_query = "UPDATE reviews SET score=?, review=?, date_posted=CURDATE() WHERE mid=".$r_mid." AND username='".$username."'"; 
+		
+			$update = mysqli_prepare($conn, $update_query);
+			mysqli_stmt_bind_param($update, "is", $score, $text);
+			mysqli_stmt_execute($update);
+		}
+	}
+	else if(isset($_POST['review-delete'])){
+		$username = $_POST['username'];
+		$mid = $_POST['mid'];
+		$delete_query = "DELETE FROM reviews WHERE mid=".$mid." AND username='".$username."'";
+		$delete_response = mysqli_query($conn, $delete_query);
+		
+		if($delete_response){
+			echo "<div class='container'><p class='text-success'>Delete successful.</p></div>";
+		}
+		else if(!$delete_response){
+			echo "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
+		}
+	}
 
 	$genres_query = "SELECT *,
 		GROUP_CONCAT(g.genre) as genres FROM media m INNER JOIN media_genres mg ON m.mid=mg.mid 
@@ -143,7 +176,8 @@
 					echo '<tr><td align="left">' . $row['username'] . '</td> 
 					<td align="left">' . $row['score'] . '</td>
 					<td align="left">' . $row['review'] . '</td>
-					<td align="left">' . $row['date_posted'] . '</td><td align="left">';
+					<td align="left">' . $row['date_posted'] . '</td>
+					<td align="left"><a href="delete.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
 				}
 				echo '</tr></table></div>';
 			}
@@ -154,7 +188,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-			<h3>Add A Review</h3>
+			<h3>Add/Update A Review</h3>
 			<form action="review.php" method="post">
 				<input type="hidden" name="title" value="<?php echo $title ?>"> <!-- add in user info later-->
 				<input type="hidden" name="mid" value="<?php echo $id ?>">
