@@ -45,6 +45,22 @@
 				}
 			}
 	}
+	
+	if(isset($_POST['review-submit'])){
+			$username = "rmoo"; // change later to be dynamic
+			//$r_title = $_POST['title'];
+			$r_mid = $_POST['mid'];
+			$text = $_POST['review-text'];
+			$score = $_POST['score'];
+			
+			$insert_query = "INSERT INTO reviews (mid, username, score, review, date_posted) 
+			VALUES (?,?,?,?,CURDATE())"; //TODO: Integrate for update query as well
+			
+			$insert = mysqli_prepare($conn, $insert_query);
+			mysqli_stmt_bind_param($insert, "isis", $r_mid, $username, $score, $text);
+			mysqli_stmt_execute($insert);
+		
+		}
 
 	$genres_query = "SELECT *,
 		GROUP_CONCAT(g.genre) as genres FROM media m INNER JOIN media_genres mg ON m.mid=mg.mid 
@@ -73,11 +89,17 @@
 ?>
 <title>Review It - <?php echo $title ?> </title>
 <div class="container">
-	<?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'"/>'; ?>
-	<h1><?php echo $title . ' (' . $year . ')'?></h1>
-	<h4><?php echo 'Genre(s): ' . $genres_str ?></h4>
-	<h4><?php echo 'Actors/Actresses: ' . $actors_str ?></h4>
-	<h6><?php echo $desc ?></h6>
+	<div class="row">
+		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+			<?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'"/>'; ?>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<h1><?php echo $title . ' (' . $year . ')'?></h1>
+			<h4><?php echo 'Genre(s): ' . $genres_str ?></h4>
+			<h4><?php echo 'Actors/Actresses: ' . $actors_str ?></h4>
+			<h6><?php echo $desc ?></h6>
+		</div>
+	</div>
 </div>
 <?php
 	if($response){
@@ -108,8 +130,8 @@
 			echo "<b>Currently no reviews available! </b>";
 		}
 		else{
-			$rvw_query = "SELECT * FROM reviews WHERE mid=".$id;
-		$rvw_response = mysqli_query($conn, $rvw_query);
+			$rvw_query = "SELECT * FROM reviews WHERE mid=".$id." ORDER BY date_posted DESC";
+			$rvw_response = mysqli_query($conn, $rvw_query);
 		
 			if($rvw_response){
 				echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
@@ -133,6 +155,11 @@
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 			<h3>Add A Review</h3>
+			<form action="review.php" method="post">
+				<input type="hidden" name="title" value="<?php echo $title ?>"> <!-- add in user info later-->
+				<input type="hidden" name="mid" value="<?php echo $id ?>">
+				<input type="submit" name="review" class="btn btn-primary" value="Add/Update">
+			</form>
 		</div>
 	</div>
 </div>
