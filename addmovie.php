@@ -22,7 +22,7 @@
   </div>
 </nav>
 <div class="container">
-	<h1>Add a Show</h1>
+	<h1>Add a Movie</h1>
 		<div class="row">
 			<form action="movies.php" method="post">
 				<div class="col-xs-4">
@@ -36,10 +36,13 @@
 					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="" /><p></p>
 					<label for="seasons">runtime</label>
 					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value=""/><p></p>
-					<label for="episodes">Services (Where the show is available)</label>
+					<label for="episodes">Services (Where the movie is available)</label>
 					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
+					<label for="description">Description</label>
+					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"></textarea>
 					<p></p>
-					<input type="submit" name="add-movie" class="btn btn-primary" value="Add Show">
+					<input type="submit" name="add-movie" class="btn btn-primary" value="Add Movie">
+					<p></p>
 				</div>
 			</form>
 		</div>

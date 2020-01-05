@@ -41,12 +41,12 @@
 					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				}
 			else{
-				$add_movie_query = "INSERT INTO media (title, year, age_rating, director, runtime, services, type) 
-				VALUES (?,?,?,?,?,?,'movie')";
+				$add_movie_query = "INSERT INTO media (title, year, age_rating, director, runtime, services, description, type) 
+				VALUES (?,?,?,?,?,?,?,'movie')";
 				
 				$add_movie = mysqli_prepare($conn, $add_movie_query);
-				mysqli_stmt_bind_param($add_movie, "sissis", $_POST['title'], $_POST['year'], $_POST['age_rating'],
-				$_POST['director'], $_POST['runtime'], $_POST['services']);
+				mysqli_stmt_bind_param($add_movie, "sississ", $_POST['title'], $_POST['year'], $_POST['age_rating'],
+				$_POST['director'], $_POST['runtime'], $_POST['services'], $_POST['description']);
 				mysqli_stmt_execute($add_movie);
 				
 			}

@@ -131,6 +131,7 @@
 			<h4><?php echo 'Genre(s): ' . $genres_str ?></h4>
 			<h4><?php echo 'Actors/Actresses: ' . $actors_str ?></h4>
 			<h6><?php echo $desc ?></h6>
+			<a href="edit.php?type="<?php echo $type ?>""><b>Edit details</b></a> <!-- work on this portion -->
 		</div>
 	</div>
 </div>

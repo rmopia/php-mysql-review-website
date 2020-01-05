@@ -38,8 +38,13 @@
 					<input type="number" class="form-control" name="seasons" size="28" maxlength="4" value=""/><p></p>
 					<label for="episodes">Episodes (Total)</label>
 					<input type="number" class="form-control" name="episodes" size="28" maxlength="10" value=""/><p></p>
+					<label for="services">Services (Where the show is available)</label>
+					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
+					<label for="description">Description</label>
+					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"></textarea>
 					<p></p>
 					<input type="submit" name="add-show" class="btn btn-primary" value="Add Show">
+					<p></p>
 				</div>
 			</form>
 		</div>
