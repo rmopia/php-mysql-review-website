@@ -23,7 +23,7 @@
 </nav>
 <div class="container">
 	<h1>TV</h1>
-	<a href="addmedia.php"><b>Add A Show</b></a>
+	<a href="addtv.php"><b>Add A Show</b></a>
 </div>
 
 <?php
@@ -34,6 +34,24 @@
 		
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
+		
+		if(isset($_POST['add-show'])){
+			if(empty($_POST['title']) || empty($_POST['year']) || empty($_POST['age_rating'])
+				|| empty($_POST['director']) || empty($_POST['seasons']) || empty($_POST['episodes'])){
+					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				}
+			else{
+				$add_show_query = "INSERT INTO media (title, year, age_rating, director, seasons, episodes) 
+				VALUES (?,?,?,?,?,?)";
+				
+				$add_show = mysqli_prepare($conn, $add_show_query);
+				mysqli_stmt_bind_param($add_show, "sissii", $_POST['title'], $_POST['year'], $_POST['age_rating'],
+				$_POST['director'], $_POST['seasons'], $_POST['episodes']);
+				mysqli_stmt_execute($add_show);
+				
+			}
+		}
+		// TODO: Insert works but doesn't show in display 
 		
 		$query = "SELECT *,
 		GROUP_CONCAT(g.genre) as genres FROM media m INNER JOIN media_genres mg ON m.mid=mg.mid 

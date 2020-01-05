@@ -23,7 +23,7 @@
 </nav>
 <div class="container">
 	<h1>Movies</h1>
-	<a href="addmedia.php"><b>Add A Movie</b></a>
+	<a href="addmovie.php"><b>Add A Movie</b></a>
 </div>
 
 <?php
