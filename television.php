@@ -41,8 +41,8 @@
 					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				}
 			else{
-				$add_show_query = "INSERT INTO media (title, year, age_rating, director, seasons, episodes) 
-				VALUES (?,?,?,?,?,?)";
+				$add_show_query = "INSERT INTO media (title, year, age_rating, director, seasons, episodes, type) 
+				VALUES (?,?,?,?,?,?,'tv')";
 				
 				$add_show = mysqli_prepare($conn, $add_show_query);
 				mysqli_stmt_bind_param($add_show, "sissii", $_POST['title'], $_POST['year'], $_POST['age_rating'],
@@ -51,34 +51,28 @@
 				
 			}
 		}
-		// TODO: Insert works but doesn't show in display 
 		
-		$query = "SELECT *,
-		GROUP_CONCAT(g.genre) as genres FROM media m INNER JOIN media_genres mg ON m.mid=mg.mid 
-		INNER JOIN genres g ON g.gid=mg.gid
-		WHERE m.type='tv' GROUP BY m.mid ORDER BY year DESC";
+		$query = "SELECT * FROM media m WHERE m.type='tv' GROUP BY m.mid ORDER BY year DESC";
 		
 		$response = mysqli_query($conn, $query);
 		if($response){
 			echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
 			<th scope="col">Title</th>
-			<th scope="col">mid</th>
 			<th scope="col">Year</th>
 			<th scope="col">Seasons</th>
 			<th scope="col">Episodes (total)</th>
 			<th scope="col">Age Rating</th>
-			<th scope="col">Genres</th>
-			<th scope="col">Director</th></tr></thead>';
+			<th scope="col">Director</th>
+			<th scope="col">Services</th></tr></thead>';
 			
 			while($row = mysqli_fetch_array($response)){
 				echo '<tr><td align="left"><a href="details.php?id='.$row['mid'].'">' . $row['title'] . '</a></td> 
-				<td align="left">' . $row['mid'] . '</td>
 				<td align="left">' . $row['year'] . '</td>
 				<td align="left">' . $row['seasons'] . '</td>
 				<td align="left">' . $row['episodes'] . '</td>
 				<td align="left">' . $row['age_rating'] . '</td>
-				<td align="left">' . $row['genres'] . '</td>
-				<td align="left">' . $row['director'] . '</td><td align="left">';
+				<td align="left">' . $row['director'] . '</td>
+				<td align="left">' . $row['services'] . '</td><td align="left">';
 			}
 			echo '</tr></table></div>';
 		}

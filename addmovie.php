@@ -22,9 +22,25 @@
   </div>
 </nav>
 <div class="container">
-	<h1>Add a Movie</h1>
-	<form action="movies.php" method="post">
-		<input type="text" class="form-control" name="title" size="28" maxlength="20" value="" />
-		<input type="text" class="form-control" name="year" size="28" maxlength="20" value="" />
-	</form>
+	<h1>Add a Show</h1>
+		<div class="row">
+			<form action="movies.php" method="post">
+				<div class="col-xs-4">
+					<label for="title">Title</label>
+					<input type="text" class="form-control" name="title" size="2" maxlength="255" value="" /><p></p>
+					<label for="year">Year</label>
+					<input type="number" class="form-control" name="year" size="28" maxlength="4" value="" max="2050" /><p></p>
+					<label for="age_rating">Age Rating</label>
+					<input type="text" class="form-control" name="age_rating" size="28" maxlength="10" value=""/><p></p>
+					<label for="director">Director</label>
+					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="" /><p></p>
+					<label for="seasons">runtime</label>
+					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value=""/><p></p>
+					<label for="episodes">Services (Where the show is available)</label>
+					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
+					<p></p>
+					<input type="submit" name="add-movie" class="btn btn-primary" value="Add Show">
+				</div>
+			</form>
+		</div>
 </div>
