@@ -52,6 +52,26 @@
 			}
 		}
 		
+		if(isset($_POST['edit-movie'])){
+			if(empty($_POST['title']) || empty($_POST['year'])){
+					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				}
+			else{
+				
+				$edit_movie_query = "UPDATE media SET title='".$_POST['title']."',year=".$_POST['year'].", age_rating='".$_POST['age_rating']."',
+				director='".$_POST['director']."', runtime=".$_POST['runtime'].", services='".$_POST['services']."',
+				description='".$_POST['description']."' WHERE mid=".$_POST['mid'];
+				$edit_movie_response = mysqli_query($conn, $edit_movie_query);
+				if($edit_movie_response){
+					echo '<div class="p-3 mb-2 bg-success text-dark container"><b>Changes successful.</b></div>';
+				}
+				else{
+					echo '<div class="p-3 mb-2 bg-danger text-dark container"><b>Something went wrong.</b></div>';
+				}
+				
+			}
+		}
+		
 		$query = "SELECT * FROM media m WHERE m.type='movie' GROUP BY m.mid ORDER BY year DESC";
 		
 		$response = mysqli_query($conn, $query);

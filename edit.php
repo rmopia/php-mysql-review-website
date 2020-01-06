@@ -55,6 +55,7 @@
 			<form action="television.php" method="post">
 				<div class="col-xs-4">
 					<label for="title">Title</label>
+					<input type="hidden" name="mid" value="<?php echo $id ?>">
 					<input type="text" class="form-control" name="title" size="2" maxlength="255" value="<?php echo $title ?>" /><p></p>
 					<label for="year">Year</label>
 					<input type="number" class="form-control" name="year" size="28" maxlength="4" value="<?php echo $year ?>" max="2050" /><p></p>
@@ -69,7 +70,7 @@
 					<label for="services">Services (Where the show is available)</label>
 					<input type="text" class="form-control" name="services" size="28" maxlength="50" value="<?php echo $services ?>"/><p></p>
 					<label for="description">Description</label>
-					<textarea class="form-control" type="text" name="description" value="<?php echo $description ?>" rows="6" cols="40"></textarea>
+					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"><?php echo $description ?></textarea>
 					<p></p>
 					<input type="submit" name="edit-show" class="btn btn-primary" value="Finish">
 					<p></p>
@@ -95,6 +96,7 @@
 		?>
 			<form action="movies.php" method="post">
 				<div class="col-xs-4">
+					<input type="hidden" name="mid" value="<?php echo $id ?>">
 					<label for="title">Title</label>
 					<input type="text" class="form-control" name="title" size="2" maxlength="255" value="<?php echo $title ?>" /><p></p>
 					<label for="year">Year</label>
@@ -108,7 +110,7 @@
 					<label for="episodes">Services (Where the movie is available)</label>
 					<input type="text" class="form-control" name="services" size="28" maxlength="50" value="<?php echo $services ?>"/><p></p>
 					<label for="description">Description</label>
-					<textarea class="form-control" type="text" name="description" value="<?php echo $description ?>" rows="6" cols="40"></textarea>
+					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"><?php echo $description ?></textarea>
 					<p></p>
 					<input type="submit" name="edit-movie" class="btn btn-primary" value="Finish">
 					<p></p>
