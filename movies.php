@@ -18,6 +18,7 @@
       <li><a href="television.php">TV</a></li>
 	  <li><a href="movies.php">Movies</a></li>
 	  <li><a href="contact.php">Contact</a></li>
+	  <li><a href="login.php">Login</a></li>
     </ul>
   </div>
 </nav>
