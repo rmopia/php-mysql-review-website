@@ -32,5 +32,87 @@
 ?>
 <div class="container">
 	<h1>Edit Details</h1>
-	
+
+	<?php
+		if(isset($_GET['id']) && $_GET['type'] == 'tv'){ 
+			$id = $_GET['id'];
+			$edit_query = "SELECT * FROM media WHERE mid=".$id;
+			$edit_response = mysqli_query($conn, $edit_query);
+			if($edit_response){
+				while($row = mysqli_fetch_array($edit_response)){
+					$title = $row['title'];
+					$year = $row['year'];
+					$description = $row['description'];
+					$img = $row['image']; // allow user to modify later
+					$age_rating = $row['age_rating'];
+					$director = $row['director'];
+					$seasons = $row['seasons'];
+					$episodes = $row['episodes'];
+					$services = $row['services'];
+				}
+			}
+	?>
+			<form action="television.php" method="post">
+				<div class="col-xs-4">
+					<label for="title">Title</label>
+					<input type="text" class="form-control" name="title" size="2" maxlength="255" value="<?php echo $title ?>" /><p></p>
+					<label for="year">Year</label>
+					<input type="number" class="form-control" name="year" size="28" maxlength="4" value="<?php echo $year ?>" max="2050" /><p></p>
+					<label for="age_rating">Age Rating</label>
+					<input type="text" class="form-control" name="age_rating" size="28" maxlength="10" value="<?php echo $age_rating ?>"/><p></p>
+					<label for="director">Director</label>
+					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="<?php echo $director ?>" /><p></p>
+					<label for="seasons">Seasons</label>
+					<input type="number" class="form-control" name="seasons" size="28" maxlength="4" value="<?php echo $seasons ?>"/><p></p>
+					<label for="episodes">Episodes (Total)</label>
+					<input type="number" class="form-control" name="episodes" size="28" maxlength="10" value="<?php echo $episodes ?>"/><p></p>
+					<label for="services">Services (Where the show is available)</label>
+					<input type="text" class="form-control" name="services" size="28" maxlength="50" value="<?php echo $services ?>"/><p></p>
+					<label for="description">Description</label>
+					<textarea class="form-control" type="text" name="description" value="<?php echo $description ?>" rows="6" cols="40"></textarea>
+					<p></p>
+					<input type="submit" name="edit-show" class="btn btn-primary" value="Finish">
+					<p></p>
+				</div>
+			</form>
+		<?php } 
+		else if(isset($_GET['id']) && $_GET['type'] == 'movie'){ 
+			$id = $_GET['id'];
+			$edit_query = "SELECT * FROM media WHERE mid=".$id;
+			$edit_response = mysqli_query($conn, $edit_query);
+			if($edit_response){
+				while($row = mysqli_fetch_array($edit_response)){
+					$title = $row['title'];
+					$year = $row['year'];
+					$description = $row['description'];
+					$img = $row['image']; // allow user to modify later
+					$age_rating = $row['age_rating'];
+					$director = $row['director'];
+					$runtime = $row['runtime'];
+					$services = $row['services'];
+				}
+			}
+		?>
+			<form action="movies.php" method="post">
+				<div class="col-xs-4">
+					<label for="title">Title</label>
+					<input type="text" class="form-control" name="title" size="2" maxlength="255" value="<?php echo $title ?>" /><p></p>
+					<label for="year">Year</label>
+					<input type="number" class="form-control" name="year" size="28" maxlength="4" value="<?php echo $year ?>" max="2050" /><p></p>
+					<label for="age_rating">Age Rating</label>
+					<input type="text" class="form-control" name="age_rating" size="28" maxlength="10" value="<?php echo $age_rating ?>"/><p></p>
+					<label for="director">Director</label>
+					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="<?php echo $director ?>" /><p></p>
+					<label for="seasons">runtime</label>
+					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value="<?php echo $runtime ?>"/><p></p>
+					<label for="episodes">Services (Where the movie is available)</label>
+					<input type="text" class="form-control" name="services" size="28" maxlength="50" value="<?php echo $services ?>"/><p></p>
+					<label for="description">Description</label>
+					<textarea class="form-control" type="text" name="description" value="<?php echo $description ?>" rows="6" cols="40"></textarea>
+					<p></p>
+					<input type="submit" name="edit-movie" class="btn btn-primary" value="Finish">
+					<p></p>
+				</div>
+			</form>
+		<?php } ?>
 </div>
