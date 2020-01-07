@@ -40,18 +40,23 @@
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
 		if(isset($_POST['edit-user'])){
-			
-			$edit_user_query = "UPDATE reviewers SET fname='".$_POST['fname']."', lname='".$_POST['lname']."', email='".$_POST['email']."' 
-			WHERE username='".$_POST['username']."'"; // make separate method to change password
-			$edit_user_response = mysqli_query($conn, $edit_user_query);
-			
-			if($edit_user_response){
-				echo '<div class="p-3 mb-2 bg-success text-dark container"><b>Changes to account successful.</b></div>';
+			$profile_pic = $_POST['profile_pic'];
+			$fname = $_POST['fname'];
+			$lname = $_POST['lname'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+		
+			if(empty($password)){ //add validator to compare password input and mysql stored password 
+				echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 			}
 			else{
-				echo '<div class="p-3 mb-2 bg-danger text-dark container"><b>Changes to account went wrong.</b></div>';
+				$edit_user_query = "UPDATE reviewers SET fname=?, lname=?, email=?, portrait=? WHERE username='".$_POST['username']."'";
+			
+				$update_user = mysqli_prepare($conn, $edit_user_query);
+				mysqli_stmt_bind_param($update_user, "sssb", $fname, $lname, $email, $profile_pic);
+				mysqli_stmt_execute($update_user);
 			}
-		}
+	}
 ?>
 <?php
 		mysqli_close($conn);

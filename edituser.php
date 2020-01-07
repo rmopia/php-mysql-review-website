@@ -42,6 +42,7 @@
 				$fname = $row['fname'];
 				$lname = $row['lname'];
 				$email = $row['email'];
+				$portrait = $row['portrait'];
 				$password = $row['password']; //encrypt this at some point // separate page for password changing
 			}
 		}
@@ -52,7 +53,6 @@
 
 <div class="container">
 	<h1>Edit Account</h1>
-
 	<form action="home.php" method="post">
 		<div class="row">
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -65,10 +65,17 @@
 				<input type="text" class="form-control" name="email" size="2" maxlength="255" value="<?php echo $email ?>" /><p></p>
 				<label for="password">Password</label>
 				<input type="password" class="form-control" name="password" size="2" maxlength="255" value="<?php echo $password ?>" /><p></p>
-				<input type="submit" name="edit-user" class="btn btn-primary" value="Finish"><p></p>
+				<input type="submit" name="edit-user" class="btn btn-primary" value="Save"><p></p>
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-				<!-- add portrait upload/change here -->
+				<label>Profile Picture</label>
+				<?php echo '<img src="data:portrait/jpeg;base64,'.base64_encode( $portrait ).'"/>'; ?>
+				<div class="input-group mb-3">
+				  <div class="custom-file">
+					<input type="file" class="custom-file-input" name="profile_pic">
+					<label class="custom-file-label" for="profile_pic">Choose file</label>
+				  </div>
+				</div>
 			</div>
 		</div>
 	</form>
