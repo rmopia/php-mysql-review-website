@@ -37,6 +37,7 @@
 			$title = $_POST['title'];
 			$mid = $_POST['mid'];
 		}
+		
 ?>
 
 <div class="container">
@@ -77,5 +78,8 @@
 		</div>
 	</div>
 </div>
+<?php 
+	mysqli_close($conn);
+?>
 
 

@@ -74,3 +74,6 @@
 		</div>
 	</form>
 </div>
+<?php 
+	mysqli_close($conn);
+?>

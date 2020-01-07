@@ -120,3 +120,6 @@
 			</form>
 		<?php } ?>
 </div>
+<?php 
+	mysqli_close($conn);
+?>

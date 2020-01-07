@@ -48,3 +48,6 @@
 		<input type="submit" name="review-delete" class="btn btn-danger" value="Delete">
 	</form>
 </div>
+<?php 
+	mysqli_close($conn);
+?>
