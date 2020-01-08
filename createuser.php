@@ -19,7 +19,17 @@
 	  <li><a href="movies.php">Movies</a></li>
 	  <li><a href="contact.php">Contact</a></li>
 	  <li><a href="login.php">Login</a></li>
-	  <li><a href="edituser.php">Account</a></li>
+	  <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		  <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="edituser.php?username=rmoo">Edit Account</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Logout</a>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>

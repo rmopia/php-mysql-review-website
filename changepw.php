@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Review It - Add A Movie</title>
+  <title>Review It</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -33,32 +33,37 @@
     </ul>
   </div>
 </nav>
-<div class="container">
-	<h1>Add a Movie</h1>
-		<div class="row">
-			<form action="movies.php" method="post">
-				<div class="col-xs-4">
-					<label for="title">Title</label>
-					<input type="text" class="form-control" name="title" size="2" maxlength="255" value="" /><p></p>
-					<label for="year">Year</label>
-					<input type="number" class="form-control" name="year" size="28" maxlength="4" value="" max="2050" /><p></p>
-					<label for="age_rating">Age Rating</label>
-					<input type="text" class="form-control" name="age_rating" size="28" maxlength="10" value=""/><p></p>
-					<label for="director">Director</label>
-					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="" /><p></p>
-					<label for="seasons">runtime</label>
-					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value=""/><p></p>
-					<label for="episodes">Services (Where the movie is available)</label>
-					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
-					<label for="description">Description</label>
-					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"></textarea>
-					<p></p>
-					<input type="submit" name="add-movie" class="btn btn-primary" value="Add Movie">
-					<p></p>
-				</div>
-			</form>
-		</div>
-</div>
-<?php 
-	mysqli_close($conn);
+<?php
+$servername = "localhost";
+	$username = "root";
+	$password = "pwdpwd";
+	$dbname = "review_site";
+	
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	$conn->select_db($dbname) or die("Unable to connect to database."); 
+	
+	if(isset($_POST['change-pw'])){
+		$username = $_POST['username'];
+		echo $username;
+	}
 ?>
+<div class="container">
+	<h1>Change Password</h1>
+	<form action="edituser.php?username=rmoo" method="post">
+		<div class="row">
+			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+				<input type="hidden" name="username" value="<?php echo $username ?>" />
+				<label for="oldpw1">Old Password</label>
+				<input type="password" class="form-control" name="oldpw1" size="2" maxlength="255" value="" /><p></p>
+				<label for="oldpw2">Reconfirm Old Password</label>
+				<input type="password" class="form-control" name="oldpw2" size="2" maxlength="255" value="" /><p></p>
+				<label for="newpw">New Password</label>
+				<input type="password" class="form-control" name="newpw" size="2" maxlength="255" value="" /><p></p>
+				<input type="submit" name="change-user-pw" class="btn btn-success" value="Save"><p></p>
+			</div>
+			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+				
+			</div>
+		</div>
+	</form>
+</div>

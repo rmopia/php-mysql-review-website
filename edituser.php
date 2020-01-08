@@ -19,7 +19,17 @@
 	  <li><a href="movies.php">Movies</a></li>
 	  <li><a href="contact.php">Contact</a></li>
 	  <li><a href="login.php">Login</a></li>
-	  <li><a href="edituser.php">Account</a></li>
+	  <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		  <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="edituser.php?username=rmoo">Edit Account</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Logout</a>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>
@@ -48,11 +58,47 @@
 		}
 		
 	}
+	if(isset($_POST['change-user-pw'])){
+		$username = $_POST['username'];
+		$oldpw1 = $_POST['oldpw1'];
+		$oldpw2 = $_POST['oldpw2'];
+		$newpw = $_POST['newpw'];
+		
+		if(!empty($oldpw1) && !empty($oldpw2) && !empty($newpw)){
+			$pw_query = "SELECT password FROM reviewers WHERE username = '".$username."'";
+			$pw_response = mysqli_query($conn, $pw_query);
+			if($pw_response){
+				while($row = mysqli_fetch_array($pw_response)){
+					$sqlpw = $row['password'];
+				}
+			}
+			if(($oldpw1 == $oldpw2) && ($oldpw1 == $sqlpw) && ($oldpw1 == $sqlpw)){
+				echo "<div class='container'><p class='text-success'>Changes successful.</p></div>";
+				$edit_pw_query = "UPDATE reviewers SET password=? WHERE username='".$username."'";
+			
+				$update_pw = mysqli_prepare($conn, $edit_pw_query);
+				mysqli_stmt_bind_param($update_pw, "s", $newpw);
+				mysqli_stmt_execute($update_pw);
+				$password = $newpw;
+			}
+			else{
+				echo "<div class='container'><p class='text-danger'>Error has occurred. Please try again.</p></div>";
+			}
+		}
+		else{
+			echo "<div class='container'><p class='text-danger'>Required fields not filled in. Please try again.</p></div>";
+		}
+		
+	}
 	
 ?>
 
 <div class="container">
 	<h1>Edit Account</h1>
+	<form action="changepw.php" method="post">
+		<input type="hidden" name="username" value="<?php echo $username ?>" />
+		<input type="submit" name="change-pw" class="btn btn-link" value="Change Password"><p></p>
+	</form>
 	<form action="home.php" method="post">
 		<div class="row">
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
