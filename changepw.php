@@ -44,7 +44,6 @@ $servername = "localhost";
 	
 	if(isset($_POST['change-pw'])){
 		$username = $_POST['username'];
-		echo $username;
 	}
 ?>
 <div class="container">

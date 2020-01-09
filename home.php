@@ -33,13 +33,6 @@
     </ul>
   </div>
 </nav>
-<div class="container">
-	<h1>Home</h1>
-	<div class="embed-responsive embed-responsive-16by9">
-		<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/3iXeAwsGhV0" allowfullscreen></iframe>
-	</div>
-</div>
-<p></p>
 <?php
 		$servername = "localhost";
 		$username = "root";
@@ -48,6 +41,33 @@
 		
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
+		
+		if(isset($_POST['login-user'])){
+			$user = $_POST['username'];
+			$pw = $_POST['password'];
+			
+			$user = stripcslashes($user);
+			$pw = stripcslashes($pw);
+			
+			if(empty($pw) || empty($user)){ //add validator to compare password input and mysql stored password 
+				echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+			}
+			else{
+				$login_query = "SELECT * FROM reviewers WHERE username='".$user."' and password='".$pw."'";
+				$login_response = mysqli_query($conn, $login_query);
+				if($login_response){
+					$row = mysqli_fetch_array($login_response);
+					$username = $row['username'];
+					$password = $row['password'];
+					if(empty($username) || empty($password)){ //validates whether these are in the mysql database to begin with
+						echo "<div class='container'><p class='text-danger'>Invalid login. Please try again.</p></div>";
+					}
+					else{
+						echo "<div class='container'><p class='text-success'>Successful login. Welcome ".$username.".</p></div>";
+					}
+				}
+			}
+		}
 		
 		if(isset($_POST['edit-user'])){
 			$profile_pic = $_POST['profile_pic'];
@@ -66,8 +86,15 @@
 				mysqli_stmt_bind_param($update_user, "sssb", $fname, $lname, $email, $profile_pic);
 				mysqli_stmt_execute($update_user);
 			}
-	}
+		}
 ?>
+<div class="container">
+	<h1>Home</h1>
+	<div class="embed-responsive embed-responsive-16by9">
+		<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/3iXeAwsGhV0" allowfullscreen></iframe>
+	</div>
+</div>
+<p></p>
 <?php
 		mysqli_close($conn);
 ?>
