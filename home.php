@@ -8,38 +8,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
-<body>
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="home.php">Review It</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="television.php">TV</a></li>
-	  <li><a href="movies.php">Movies</a></li>
-	  <li><a href="contact.php">Contact</a></li>
-	  <li><a href="login.php">Login</a></li>
-	  <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Account
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		  <a class="dropdown-item" href="#">Profile</a>
-          <a class="dropdown-item" href="edituser.php?username=rmoo">Edit Account</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Logout</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
 <?php
 		$servername = "localhost";
-		$username = "root";
 		$password = "pwdpwd";
 		$dbname = "review_site";
 		
-		$conn = new mysqli($servername, $username, $password, $dbname);
+		$conn = new mysqli($servername, "root", $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
 		if(isset($_POST['login-user'])){
@@ -88,6 +62,32 @@
 			}
 		}
 ?>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="home.php">Review It</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="television.php">TV</a></li>
+	  <li><a href="movies.php">Movies</a></li>
+	  <li><a href="contact.php">Contact</a></li>
+	  <li><a href="login.php">Login</a></li>
+	  <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		  <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 <div class="container">
 	<h1>Home</h1>
 	<div class="embed-responsive embed-responsive-16by9">

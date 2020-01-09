@@ -25,7 +25,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		  <a class="dropdown-item" href="#">Profile</a>
-          <a class="dropdown-item" href="edituser.php?username=rmoo">Edit Account</a>
+          <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Logout</a>
         </div>
@@ -48,19 +48,25 @@
 		$lname = $_POST['lname'];
 		$email = $_POST['email'];
 		$password = $_POST['password'];
+		$password2 = $_POST['password2'];
 		
-		if(empty($username) || empty($email) || empty($password)){
+		if(empty($username) || empty($email) || empty($password) || empty($password2)){
 			echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 		}
 		else{
-			$insert_user_query = "INSERT INTO reviewers (username, fname, lname, email, password) 
-			VALUES (?,?,?,?,?)"; 
-		
-			$insert_user = mysqli_prepare($conn, $insert_user_query);
-			mysqli_stmt_bind_param($insert_user, "sssss", $username, $fname, $lname, $email, $password);
-			mysqli_stmt_execute($insert_user);
+			if($password == $password2){
+				$insert_user_query = "INSERT INTO reviewers (username, fname, lname, email, password) 
+				VALUES (?,?,?,?,?)"; 
 			
-			echo "<div class='container'><p class='text-success'>Error: User creation successful.</p></div>";
+				$insert_user = mysqli_prepare($conn, $insert_user_query);
+				mysqli_stmt_bind_param($insert_user, "sssss", $username, $fname, $lname, $email, $password);
+				mysqli_stmt_execute($insert_user);
+				
+				echo "<div class='container'><p class='text-success'>Account created!</p></div>";
+			}
+			else{
+				echo "<div class='container'><p class='text-danger'>Passwords didn't match. Please try again.</p></div>";
+			}
 		}
 	}
 ?>

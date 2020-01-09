@@ -25,7 +25,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		  <a class="dropdown-item" href="#">Profile</a>
-          <a class="dropdown-item" href="edituser.php?username=rmoo">Edit Account</a>
+          <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Logout</a>
         </div>
@@ -60,6 +60,8 @@
 				<input type="text" class="form-control" name="email" size="2" maxlength="255" value="" /><p></p>
 				<label for="password">Password</label>
 				<input type="password" class="form-control" name="password" size="2" maxlength="255" value="" /><p></p>
+				<label for="password2">Confirm Password</label>
+				<input type="password" class="form-control" name="password2" size="2" maxlength="255" value="" /><p></p>
 				<input type="submit" name="create-user" class="btn btn-primary" value="Create User"><p></p>
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
