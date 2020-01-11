@@ -160,22 +160,9 @@
 		</div>
 	</div>
 </div>
-<?php
-	if($response){
-		
-		if($type=="movie"){
-			
-		}
-		else if($type=="tv"){
-			
-		}
-		else{
-			echo "error - empty";
-		}
-	}
-?>
 <div class="container">
 	<h3>Recent Reviews</h3>
+	<p></p><a href="reviewlist.php?mid=<?php echo $id ?>"><b>View more...</b></a>
 	<?php
 		$check_query = "SELECT * FROM reviews WHERE mid=".$id;
 		$check_response = mysqli_query($conn, $check_query);
@@ -189,9 +176,10 @@
 			echo "<b>Currently no reviews available! </b>";
 		}
 		else{
-			$rvw_query = "SELECT * FROM reviews WHERE mid=".$id." ORDER BY date_posted DESC";
+			$rvw_query = "SELECT * FROM reviews WHERE mid=".$id." ORDER BY date_posted DESC LIMIT 3";
 			$rvw_response = mysqli_query($conn, $rvw_query);
-		
+			
+			//$i = 0;
 			if($rvw_response){
 				echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
 				<th scope="col">Username</th>
@@ -204,6 +192,7 @@
 					<td align="left">' . $row['review'] . '</td>
 					<td align="left">' . $row['date_posted'] . '</td>
 					<td align="left"><a href="delete.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
+					//$i++;
 				}
 				echo '</tr></table></div>';
 			}
