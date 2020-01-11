@@ -35,11 +35,10 @@
 </nav>
 <?php
 		$servername = "localhost";
-		$username = "root";
 		$password = "pwdpwd";
 		$dbname = "review_site";
 		
-		$conn = new mysqli($servername, $username, $password, $dbname);
+		$conn = new mysqli($servername, "root", $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
 		if(isset($_POST['review'])){

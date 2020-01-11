@@ -96,15 +96,28 @@
 	else if(isset($_POST['review-delete'])){
 		$username = $_POST['username'];
 		$mid = $_POST['mid'];
-		$delete_query = "DELETE FROM reviews WHERE mid=".$mid." AND username='".$username."'";
-		$delete_response = mysqli_query($conn, $delete_query);
-		
-		if($delete_response){
-			echo "<div class='container'><p class='text-success'>Delete successful.</p></div>";
-		}
-		else if(!$delete_response){
-			echo "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
-		}
+		$password = $_POST['password'];
+		$check_user_query = "SELECT * FROM reviewers WHERE username='".$username."' AND password='".$password."'";
+		$check_user_response = mysqli_query($conn, $check_user_query);
+			if($check_user_response){
+				$row = mysqli_fetch_array($check_user_response);
+				$check_username = $row['username'];
+				$check_password = $row['password'];
+				if(empty($check_username) || empty($check_password)){
+					echo "<div class='container'><p class='text-danger'>Invalid deletion. Please try again.</p></div>";
+				}
+				else{
+					$delete_query = "DELETE FROM reviews WHERE mid=".$mid." AND username='".$username."'";
+					$delete_response = mysqli_query($conn, $delete_query);
+					
+					if($delete_response){
+						echo "<div class='container'><p class='text-success'>Delete successful.</p></div>";
+					}
+					else if(!$delete_response){
+						echo "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
+					}
+				}
+			}
 	}
 
 	$genres_query = "SELECT *,

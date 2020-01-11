@@ -122,9 +122,14 @@
 					<label class="custom-file-label" for="profile_pic">Choose file</label>
 				  </div>
 				</div>
+	</form>
+				<form action="deleteuser.php" method="post">
+					<p></p><p></p>
+					<input type="hidden" name="username" value="<?php echo $username ?>" />
+					<input type="submit" name="delete-user" class="btn btn-danger" value="Delete Account"><p></p>
+				</form>
 			</div>
 		</div>
-	</form>
 </div>
 <?php 
 	mysqli_close($conn);

@@ -61,6 +61,35 @@
 				mysqli_stmt_execute($update_user);
 			}
 		}
+		
+		if(isset($_POST['delete-user-confirm'])){
+			$user = $_POST['username'];
+			$pw1 = $_POST['pw1'];
+			$pw2 = $_POST['pw2'];
+			
+			$user = stripcslashes($user);
+			$pw1 = stripcslashes($pw1);
+			$pw2 = stripcslashes($pw2);
+			
+			if(empty($pw1) || empty($pw2) || empty($user)){ //add validator to compare password input and mysql stored password 
+				echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+			}
+			else if($pw1 == $pw2){
+				$password = $pw1;
+				$del_user_query = "DELETE FROM reviewers WHERE password='".$password."' AND username='".$user."'";
+				$del_user_response = mysqli_query($conn, $del_user_query);
+				
+				if($del_user_response){
+					echo "<div class='container'><p class='text-success'>User deleted. Farewell.</p></div>";
+				}
+				else if(!$del_user_response){
+					echo "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
+				}
+			}
+			else{
+				echo "<div class='container'><p class='text-danger'>Something went wrong.</p></div>";
+			}
+		}
 ?>
 <body>
 <nav class="navbar navbar-inverse">

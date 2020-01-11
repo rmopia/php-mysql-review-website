@@ -55,6 +55,7 @@ $servername = "localhost";
 			$insert_comment = mysqli_prepare($conn, $insert_comment_query);
 			mysqli_stmt_bind_param($insert_comment, "sss", $name, $comment, $email);
 			mysqli_stmt_execute($insert_comment);
+			echo "<div class='container'><p class='text-success'>Comment sent! Thank you.</p></div>";
 		}
 		
 		else{
