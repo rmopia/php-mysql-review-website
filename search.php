@@ -30,6 +30,10 @@
           <a class="dropdown-item" href="#">Logout</a>
         </div>
       </li>
+	  <li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">
+			<input class="form-control mr-sm-2" name="t" type="search" placeholder="..." aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form></li>
     </ul>
   </div>
 </nav>
@@ -41,33 +45,45 @@
 	$conn = new mysqli($servername, "root", $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 	
-	if(isset($_GET['search-thing'])){
-		$search = $_GET['search-thing'];
-
+	if(isset($_GET['t'])){
+		$search = $_GET['t'];
 	}
+	
 ?>
 <div class="container">
-	<h1>Search Results: <?php  ?></h1>
+	<h1>Search Results: '<?php echo $search ?>'</h1>
 	<!-- Add search filter options -->
 	<?php
-	$search_query = "SELECT * FROM media m, reviews r WHERE m.title LIKE '".$search."' OR m.description LIKE '".$search."' OR m.director LIKE '".$search."'
-	OR r.username LIKE '".$search."' OR r.review LIKE '".$search."'";
-		
+	if($_GET['t'] != ''){
+		$search_query = "SELECT * FROM media m, reviews r WHERE m.title LIKE '%$search%' OR m.description LIKE '%$search%' OR m.director LIKE '%$search%'
+		OR r.username='%$search%' OR r.review='%$search%'";
 		$search_response = mysqli_query($conn, $search_query);
-		if($search_response){
-			while($row = mysqli_fetch_array($search_response)){
-				$title = $row['title'];
-				$desc = $row['description'];
-				$director = $row['director'];
-				$username = $row['username'];
-				$review = $row['review'];
-				
-				echo '<h1> '.$title.' </h1>';
+			if($search_response){
+				while($row = mysqli_fetch_array($search_response)){ //add if else statements to include reviewers/reviews as well
+					$title = $row['title'];
+					$desc = $row['description'];
+					$director = $row['director'];
+					$mid = $row['mid'];
+					
+					echo '<a href=details.php?id='.$mid.'><h2> '.$title.' </h2></a>';
+					
+					if(!empty($director)){
+						echo '<h6> Director(s): '.$director.' </h6>';
+					}
+					
+					if(!empty($desc)){
+						echo '<h6> '.$desc.' </h6>';
+					}
+					
+				}
 			}
-		}
-		else{
-			echo "No results found.";
-		}
+			else{
+				echo "<div class='container'><p class='text-danger'>No Results found.</p></div>";
+			}
+	}
+	else if($_GET['t'] == ''){ //if button is clicked and nothing is inputted into search bar redirect to home page
+		header('Location: home.php');
+	}
 	?>
 </div>
 

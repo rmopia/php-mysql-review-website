@@ -29,6 +29,10 @@
           <a class="dropdown-item" href="#">Logout</a>
         </div>
       </li>
+	  <li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">
+			<input class="form-control mr-sm-2" name="t" type="search" placeholder="..." aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form></li>
     </ul>
   </div>
 </nav>
@@ -131,19 +135,6 @@
 			$genres_str = str_replace(",", ", ", $genres);
 		}
 	}
-	
-	$actors_query = "SELECT *,
-		GROUP_CONCAT(a.actor) as actors FROM media m INNER JOIN media_actors ma ON m.mid=ma.mid 
-		INNER JOIN actors a ON a.aid=ma.aid
-		WHERE m.mid='".$id."'";
-	$response = mysqli_query($conn, $actors_query);
-	if($response){
-		while($row = mysqli_fetch_array($response)){
-			$actors = $row['actors'];
-			$actors_str = str_replace(",", ", ", $actors);
-		}
-	}
-	
 ?>
 <title>Review It - <?php echo $title ?> </title>
 <div class="container">
@@ -154,6 +145,24 @@
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<h1><?php echo $title . ' (' . $year . ')'?></h1>
 			<h4><?php echo 'Genre(s): ' . $genres_str ?></h4>
+<?php
+	$actors_query = "SELECT *,
+		GROUP_CONCAT(a.actor) as actors FROM media m INNER JOIN media_actors ma ON m.mid=ma.mid 
+		INNER JOIN actors a ON a.aid=ma.aid
+		WHERE m.mid='".$id."'";
+	$response = mysqli_query($conn, $actors_query);
+	if($response){
+		$row = mysqli_fetch_array($response);
+		$actors = $row['actors'];
+		$actors_str = str_replace(",", ", ", $actors);
+		//contain a separate link for each actor ala actors.php?id='' containing info, etc.; 
+		/*$arr = explode(", ", $actors_str);
+		foreach($arr as $val){
+			echo $val . '<br />';
+		}*/
+	}
+
+?>
 			<h4><?php echo 'Actors/Actresses: ' . $actors_str ?></h4>
 			<h6><?php echo $desc ?></h6>
 			<a href="edit.php?id=<?php echo $id ?>&type=<?php echo $type ?>"><b>Edit details</b></a> <!-- work on this portion -->
@@ -162,7 +171,7 @@
 </div>
 <div class="container">
 	<h3>Recent Reviews</h3>
-	<p></p><a href="reviewlist.php?mid=<?php echo $id ?>"><b>View more...</b></a>
+	<p></p><a href="reviewlist.php?mid=<?php echo $id ?>"><b>View more...</b></a><br />
 	<?php
 		$check_query = "SELECT * FROM reviews WHERE mid=".$id;
 		$check_response = mysqli_query($conn, $check_query);
@@ -179,7 +188,6 @@
 			$rvw_query = "SELECT * FROM reviews WHERE mid=".$id." ORDER BY date_posted DESC LIMIT 3";
 			$rvw_response = mysqli_query($conn, $rvw_query);
 			
-			//$i = 0;
 			if($rvw_response){
 				echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
 				<th scope="col">Username</th>
@@ -192,7 +200,6 @@
 					<td align="left">' . $row['review'] . '</td>
 					<td align="left">' . $row['date_posted'] . '</td>
 					<td align="left"><a href="delete.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
-					//$i++;
 				}
 				echo '</tr></table></div>';
 			}
