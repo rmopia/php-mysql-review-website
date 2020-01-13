@@ -107,7 +107,7 @@
           Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		  <a class="dropdown-item" href="#">Profile</a>
+		  <a class="dropdown-item" href="profile.php?username=<?php echo $username ?>">Profile</a>
           <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Logout</a>
