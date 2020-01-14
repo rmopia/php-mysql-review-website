@@ -106,7 +106,8 @@
 				<td align="left">' . $row['runtime'] . '</td>
 				<td align="left">' . $row['age_rating'] . '</td>
 				<td align="left">' . $row['director'] . '</td>
-				<td align="left">' . $row['services'] . '</td><td align="left">';
+				<td align="left">' . $row['services'] . '</td>
+				<td align="left"><a href=movies.php>Favorite</a></td><td align="left">';
 			}
 			echo '</tr></table></div>';
 		}

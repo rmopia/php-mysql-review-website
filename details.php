@@ -62,6 +62,53 @@
 			}
 	}
 	
+	if(isset($_POST['fav-media'])){
+		$username = $_POST['username'];
+		$mid = $_POST['mid'];
+		$type = $_POST['type'];
+		$media_title = $_POST['title'];
+		if(empty($username) || empty($mid)){
+			echo "<div class='container'><p class='text-danger'>A problem has occurred.</p></div>";
+		}
+		else{
+			$fav_query = "SELECT * FROM favorites WHERE username='".$username."' AND mid='".$mid."'";
+			$fav_response = mysqli_query($conn, $fav_query);
+			if($fav_response){
+				$row = mysqli_fetch_array($fav_response);
+				$favorite = $row['favorite'];
+				
+				if(empty($row['favorite']) && empty($row['mid']) && empty($row['username'])){
+					$insert_fav_q = "INSERT INTO favorites (mid, username, favorite) VALUES (?,?,1)"; 
+					// if new insert then assumed user wants to favorite movie/tv show 0 -> 1
+					$insert_fav = mysqli_prepare($conn, $insert_fav_q);
+					mysqli_stmt_bind_param($insert_fav, "is", $mid, $username);
+					mysqli_stmt_execute($insert_fav);
+					
+					echo "<div class='container'><p class='text-success'>".$title." favorited!</p></div>";
+				}
+				else{
+					if($favorite == 0){
+						$update_fav_query = "UPDATE favorites SET favorite=1 WHERE mid=".$mid." AND username='".$username."'"; 
+						$update_fav_response = mysqli_query($conn, $update_fav_query);
+						if($update_fav_response){
+							echo "<div class='container'><p class='text-success'>".$media_title." favorited!</p></div>";
+						}
+					}
+					else if($favorite == 1){
+						$update_fav_query = "UPDATE favorites SET favorite=0 WHERE mid=".$mid." AND username='".$username."'"; 
+						$update_fav_response = mysqli_query($conn, $update_fav_query);
+						if($update_fav_response){
+							echo "<div class='container'><p class='text-success'>".$media_title." unfavorited!</p></div>";
+						}
+					}
+				}
+			}
+			else{
+				echo "<div class='container'><p class='text-danger'>A problem has occurred!</p></div>";
+			}
+		}
+	}
+	
 	if(isset($_POST['review-submit'])){
 		$username = "rmoo"; // change later to be dynamic
 		$r_mid = $_POST['mid'];
@@ -141,6 +188,13 @@
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 			<?php echo '<img src="data:image/jpeg;base64,'.base64_encode( $img ).'"/>'; ?>
+			<form action="details.php?id=<?php echo $id ?>" method="post">
+				<input type="hidden" name="title" value="<?php echo $title ?>">
+				<input type="hidden" name="mid" value="<?php echo $id ?>">
+				<input type="hidden" name="username" value="rmoo">
+				<input type="hidden" name="type" value="<?php echo $type ?>">
+				<button type="submit" name="fav-media" class="btn btn-link"><b>Favorite</b></button>
+			</form>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<h1><?php echo $title . ' (' . $year . ')'?></h1>
