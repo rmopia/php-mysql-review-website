@@ -26,7 +26,7 @@
 		  <a class="dropdown-item" href="#">Profile</a>
           <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Logout</a>
+          <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
 	  <li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">

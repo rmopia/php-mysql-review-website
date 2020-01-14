@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Review It - Home</title>
+  <title>Review It - Homepage</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -9,6 +9,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <?php
+		session_start();
+
 		$servername = "localhost";
 		$password = "pwdpwd";
 		$dbname = "review_site";
@@ -16,32 +18,6 @@
 		$conn = new mysqli($servername, "root", $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
-		if(isset($_POST['login-user'])){
-			$user = $_POST['username'];
-			$pw = $_POST['password'];
-			
-			$user = stripcslashes($user);
-			$pw = stripcslashes($pw);
-			
-			if(empty($pw) || empty($user)){ //add validator to compare password input and mysql stored password 
-				echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
-			}
-			else{
-				$login_query = "SELECT * FROM reviewers WHERE username='".$user."' and password='".$pw."'";
-				$login_response = mysqli_query($conn, $login_query);
-				if($login_response){
-					$row = mysqli_fetch_array($login_response);
-					$username = $row['username'];
-					$password = $row['password'];
-					if(empty($username) || empty($password)){ //validates whether these are in the mysql database to begin with
-						echo "<div class='container'><p class='text-danger'>Invalid login. Please try again.</p></div>";
-					}
-					else{
-						echo "<div class='container'><p class='text-success'>Successful login. Welcome ".$username.".</p></div>";
-					}
-				}
-			}
-		}
 		
 		if(isset($_POST['edit-user'])){
 			$profile_pic = $_POST['profile_pic'];
@@ -51,7 +27,9 @@
 			$password = $_POST['password'];
 		
 			if(empty($password)){ //add validator to compare password input and mysql stored password 
-				echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				$message = "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				header('Location: login.php?message='.$message);
+				die;
 			}
 			else{
 				$edit_user_query = "UPDATE reviewers SET fname=?, lname=?, email=?, portrait=? WHERE username='".$_POST['username']."'";
@@ -72,7 +50,9 @@
 			$pw2 = stripcslashes($pw2);
 			
 			if(empty($pw1) || empty($pw2) || empty($user)){ //add validator to compare password input and mysql stored password 
-				echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				$message = "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				header('Location: login.php?message='.$message);
+				die;
 			}
 			else if($pw1 == $pw2){
 				$password = $pw1;
@@ -83,11 +63,48 @@
 					echo "<div class='container'><p class='text-success'>User deleted. Farewell.</p></div>";
 				}
 				else if(!$del_user_response){
-					echo "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
+					$message = "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
+					header('Location: login.php?message='.$message);
+					die;
 				}
 			}
 			else{
-				echo "<div class='container'><p class='text-danger'>Something went wrong.</p></div>";
+				$message = "<div class='container'><p class='text-danger'>Something went wrong.</p></div>";
+				header('Location: login.php?message='.$message);
+				die;
+			}
+		}
+		
+		if(isset($_POST['login-user'])){
+			$user = $_POST['username'];
+			$pw = $_POST['password'];
+			
+			$user = stripcslashes($user);
+			$pw = stripcslashes($pw);
+			
+			if(empty($pw) || empty($user)){ //add validator to compare password input and mysql stored password 
+				$message = "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
+				header('Location: login.php?message='.$message);
+				die;
+			}
+			else{
+				$login_query = "SELECT * FROM reviewers WHERE username='".$user."' and password='".$pw."'";
+				$login_response = mysqli_query($conn, $login_query);
+				if($login_response){
+					$row = mysqli_fetch_array($login_response);
+					$username = $row['username'];
+					$password = $row['password'];
+					if(empty($username) || empty($password)){ //validates whether these are in the mysql database to begin with
+						$message = "<div class='container'><p class='text-danger'>Invalid login. Please try again.</p></div>";
+						header('Location: login.php?message='.$message);
+						die;
+					}
+					else{
+						$_SESSION['loggedin'] = true;
+						$_SESSION['username'] = $username;
+						$message = "<div class='container'><p class='text-success'>Successful login. Welcome ".$username.".</p></div>";
+					}
+				}
 			}
 		}
 ?>
@@ -107,10 +124,10 @@
           Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		  <a class="dropdown-item" href="profile.php?username=<?php echo $username ?>">Profile</a>
-          <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
+		  <a class="dropdown-item" href="profile.php?username=<?php echo $_SESSION['username'] ?>">Profile</a>
+          <a class="dropdown-item" href="edituser.php?username=<?php echo $_SESSION['username'] ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Logout</a>
+          <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
 		<li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">
@@ -120,7 +137,14 @@
     </ul>
   </div>
 </nav>
-
+<?php
+		if(isset($_GET['message'])){
+			echo $_GET['message'];
+		}
+		else if(!empty($message)){
+			echo $message;
+		} 
+?>
 <div class="container">
 	<h1>Home</h1>
 	<div class="embed-responsive embed-responsive-16by9">

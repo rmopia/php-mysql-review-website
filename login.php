@@ -27,7 +27,7 @@
 		  <a class="dropdown-item" href="#">Profile</a>
           <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Logout</a>
+          <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
     </ul>
@@ -41,6 +41,10 @@
 	
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
+	
+	if(isset($_GET['message'])){
+		echo $_GET['message'];
+	}
 	
 	if(isset($_POST['create-user'])){
 		$username = $_POST['username'];

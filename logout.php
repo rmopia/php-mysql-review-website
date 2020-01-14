@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Review It</title>
+  <title>Review It - Logout</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -30,39 +30,25 @@
           <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
-	  <li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">
-			<input class="form-control mr-sm-2" name="t" type="search" placeholder="..." aria-label="Search">
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-		</form></li>
     </ul>
   </div>
 </nav>
+<div class="container">
+<h1>Logout</h1>
+</div>
 <?php
-	$servername = "localhost";
-	$password = "pwdpwd";
-	$dbname = "review_site";
+	session_start();
 	
-	$conn = new mysqli($servername, "root", $password, $dbname);
-	$conn->select_db($dbname) or die("Unable to connect to database."); 
-	
-	if(isset($_POST['delete-user'])){
-		$username = $_POST['username'];
+	if (!(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != '')) {
+		$message = "<div class='container'><p class='text-danger'>Please log in.</p></div>";
+		header ("Location: login.php?message=".$message);
+		die;
+	}
+	else{
+		$username = $_SESSION['username'];
+		session_destroy();
+		$message = "<div class='container'><p class='text-success'>Successfully logged out. See you later, ".$username.".</p></div>";
+		header ("Location: home.php?message=".$message);
+		die;
 	}
 ?>
-<div class="container">
-	<h1>Delete Account</h1>
-	<div class="p-3 mb-2 bg-danger text-dark"><b>Warning: This will permanently delete your account, <?php echo $username ?>.</b></div>
-	<p></p>
-	<form action="home.php" method="post">
-		<div class="row">
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-				<input type="hidden" name="username" value="<?php echo $username ?>" />
-				<label for="pw1">Password</label>
-				<input type="password" class="form-control" name="pw1" size="2" maxlength="255" value="" /><p></p>
-				<label for="pw2">Confirm Password</label>
-				<input type="password" class="form-control" name="pw2" size="2" maxlength="255" value="" /><p></p><p></p>
-				<input type="submit" name="delete-user-confirm" class="btn btn-danger" value="Delete Account"><p></p>
-			</div>
-		</div>
-	</form>
-</div>
