@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Review It!</title>
+  <title>Review It - Update Review</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -27,16 +27,13 @@
 		  <a class="dropdown-item" href="#">Profile</a>
           <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Logout</a>
+          <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>
-	  <li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">
-			<input class="form-control mr-sm-2" name="t" type="search" placeholder="..." aria-label="Search">
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-		</form></li>
     </ul>
   </div>
 </nav>
+
 <?php
 		session_start();
 
@@ -47,16 +44,28 @@
 		$conn = new mysqli($servername, "root", $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
-		if(isset($_POST['review'])){
-			$username = $_SESSION['username']; // change later to be dynamic
-			$title = $_POST['title'];
-			$mid = $_POST['mid'];
+		if($_GET['user'] != $_SESSION['username']){
+			$message = "<div class='container'><p class='text-danger'>Error: Not allowed to update this review.</p></div>";
+			header('Location:details.php?id='.$_GET['id'].'&message='.$message);
+			die;
 		}
+		
+		if(isset($_GET['id']) && ($_GET['user'])){
+			$mid = $_GET['id'];
+			$username= $_GET['user'];
+		}
+		
+		$title_query = "SELECT title FROM media WHERE mid=".$mid;
+		$title_response = mysqli_query($conn, $title_query);
+			if($title_response){
+				$row = mysqli_fetch_array($title_response);
+				$title = $row['title'];
+			}
 		
 ?>
 
 <div class="container">
-	<h1>Add a Review</h1>
+<h1>Update A Review</h1>
 	<h2><?php echo $title ?></h2>
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -79,12 +88,11 @@
 					<option value="10">10</option>
 				  </select>
 				</div>
-				<input type="hidden" name="title" value="<?php echo $title ?>">
 				<input type="hidden" name="mid" value="<?php echo $mid ?>">
 				<input type="hidden" name="username" value="<?php echo $username ?>">
 				<p></p>
 				<p></p>
-				<input type="submit" name="review-submit" class="btn btn-primary" value="Add">
+				<input type="submit" name="review-update" class="btn btn-primary" value="Update">
 			</form>
 		</div>
 	</div>
@@ -92,5 +100,3 @@
 <?php 
 	mysqli_close($conn);
 ?>
-
-

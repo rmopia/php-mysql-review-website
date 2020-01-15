@@ -38,15 +38,20 @@
 </nav>
 
 <?php
+	session_start();
+
+	if(isset($_GET['message'])){
+		echo $_GET['message'];
+	}
+
 		$servername = "localhost";
-		$username = "root";
 		$password = "pwdpwd";
 		$dbname = "review_site";
 		
-		$conn = new mysqli($servername, $username, $password, $dbname);
+		$conn = new mysqli($servername, "root", $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 
-	if(isset($_GET['id'])){ // if hyperlink is clicked, mid is grabbed
+	if(isset($_GET['id'])){ 
 		$id = $_GET['id'];
 		
 		$find_type_query = "SELECT * FROM media WHERE mid=".$id;
@@ -63,7 +68,7 @@
 	}
 	
 	if(isset($_POST['fav-media'])){
-		$username = $_POST['username'];
+		$username = $_SESSION['username'];
 		$mid = $_POST['mid'];
 		$type = $_POST['type'];
 		$media_title = $_POST['title'];
@@ -110,7 +115,7 @@
 	}
 	
 	if(isset($_POST['review-submit'])){
-		$username = "rmoo"; // change later to be dynamic
+		$username = $_POST['username'];
 		$r_mid = $_POST['mid'];
 		$text = $_POST['review-text'];
 		$score = $_POST['score'];
@@ -125,10 +130,11 @@
 			$insert = mysqli_prepare($conn, $insert_query);
 			mysqli_stmt_bind_param($insert, "isis", $r_mid, $username, $score, $text);
 			mysqli_stmt_execute($insert);
+			echo "<div class='container'><p class='text-success'>Review added!</p></div>";
 		}
 	}
 	else if(isset($_POST['review-update'])){
-		$username = "rmoo"; // change later to be dynamic
+		$username = $_POST['username'];
 		$r_mid = $_POST['mid'];
 		$text = $_POST['review-text'];
 		$score = $_POST['score'];
@@ -142,6 +148,8 @@
 			$update = mysqli_prepare($conn, $update_query);
 			mysqli_stmt_bind_param($update, "is", $score, $text);
 			mysqli_stmt_execute($update);
+			
+			echo "<div class='container'><p class='text-success'>Review updated!</p></div>";
 		}
 	}
 	else if(isset($_POST['review-delete'])){
@@ -162,7 +170,7 @@
 					$delete_response = mysqli_query($conn, $delete_query);
 					
 					if($delete_response){
-						echo "<div class='container'><p class='text-success'>Delete successful.</p></div>";
+						echo "<div class='container'><p class='text-success'>Review deleted.</p></div>";
 					}
 					else if(!$delete_response){
 						echo "<div class='container'><p class='text-danger'>An error has occurred.</p></div>";
@@ -253,22 +261,23 @@
 					<td align="left">' . $row['score'] . '</td>
 					<td align="left">' . $row['review'] . '</td>
 					<td align="left">' . $row['date_posted'] . '</td>
-					<td align="left"><a href="delete.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
+					<td align="right"><a href="updatereview.php?id='.$row['mid'].'&user='.$row['username'].'">Update</td>
+					<td align="right"><a href="deletereview.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
 				}
 				echo '</tr></table></div>';
 			}
 		}
-		
+	
 	?>
 </div>
 <div class="container">
 	<div class="row">
 		<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-			<h3>Add/Update A Review</h3>
+			<h3>Add A Review</h3>
 			<form action="review.php" method="post">
 				<input type="hidden" name="title" value="<?php echo $title ?>"> <!-- add in user info later-->
 				<input type="hidden" name="mid" value="<?php echo $id ?>">
-				<input type="submit" name="review" class="btn btn-primary" value="Add/Update">
+				<input type="submit" name="review" class="btn btn-primary" value="Add"><p></p>
 			</form>
 		</div>
 	</div>

@@ -10,6 +10,12 @@
 </head>
 <?php
 		session_start();
+		if($_SESSION['loggedin'] == 1){
+			echo "logged in as ".$_SESSION['username'];
+		}
+		else{
+			echo "not logged in";
+		}
 
 		$servername = "localhost";
 		$password = "pwdpwd";

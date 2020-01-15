@@ -34,14 +34,21 @@
   </div>
 </nav>
 <?php
+	session_start();
+
 	$servername = "localhost";
-	$username = "root";
 	$password = "pwdpwd";
 	$dbname = "review_site";
 	
-	$conn = new mysqli($servername, $username, $password, $dbname);
+	$conn = new mysqli($servername, "root", $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
-		
+	
+	if($_GET['user'] != $_SESSION['username']){
+		$message = "<div class='container'><p class='text-danger'>Error: Not allowed to remove this review.</p></div>";
+		header('Location:details.php?id='.$_GET['id'].'&message='.$message);
+		die;
+	}
+	
 	if(isset($_GET['id']) && ($_GET['user'])){
 		$mid = $_GET['id'];
 		$username= $_GET['user'];
@@ -52,6 +59,7 @@
 	<h1>Delete A Review</h1>
 	<div class="p-3 mb-2 bg-danger text-dark"><b>Warning: By deleting your review, it will be removed permanently.</b></div>
 	<p></p>
+	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 	<form action="details.php?id=<?php echo $mid ?>" method="post">
 		<input type="hidden" name="username" value="<?php echo $username ?>">
 		<input type="hidden" name="mid" value="<?php echo $mid ?>">
@@ -59,6 +67,7 @@
 		<input type="password" class="form-control" name="password" size="2" maxlength="255" value="" /><p></p>
 		<input type="submit" name="review-delete" class="btn btn-danger" value="Delete">
 	</form>
+	</div>
 </div>
 <?php 
 	mysqli_close($conn);
