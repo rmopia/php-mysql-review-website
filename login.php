@@ -21,8 +21,16 @@
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 	
+	if(!empty($_SESSION['username'])){
+		$message = "<div class='container'><b class='text-warning'>You are already logged in.</b></div>";
+	}
+	
 	if(isset($_GET['message'])){
 		echo $_GET['message'];
+	}
+	else if(!empty($message)){
+		echo $message;
+		die;
 	}
 	
 	if(isset($_POST['create-user'])){

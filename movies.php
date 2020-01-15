@@ -18,13 +18,54 @@
 	
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
-?>
-<div class="container">
-	<h1>Movies</h1>
-	<a href="addmovie.php"><b>Add A Movie</b></a>
-</div>
 
-<?php
+	if(isset($_POST['fav-movie'])){
+		$username = $_SESSION['username'];
+		$mid = $_POST['mid'];
+		$movie_title = $_POST['title'];
+		
+		if(empty($username) || empty($mid)){
+			echo "<div class='container'><p class='text-danger'>A problem has occurred.</p></div>";
+		}
+		else{
+			$fav_query = "SELECT * FROM favorites WHERE username='".$username."' AND mid='".$mid."'";
+			$fav_response = mysqli_query($conn, $fav_query);
+			if($fav_response){
+				$row = mysqli_fetch_array($fav_response);
+				$favorite = $row['favorite'];
+				
+				if(empty($row['favorite']) && empty($row['mid']) && empty($row['username'])){
+					$insert_fav_q = "INSERT INTO favorites (mid, username, favorite) VALUES (?,?,1)"; 
+					// if new insert then assumed user wants to favorite movie/tv show 0 -> 1
+					$insert_fav = mysqli_prepare($conn, $insert_fav_q);
+					mysqli_stmt_bind_param($insert_fav, "is", $mid, $username);
+					mysqli_stmt_execute($insert_fav);
+					
+					echo "<div class='container'><p class='text-success'>".$movie_title." favorited!</p></div>";
+				}
+				else{
+					if($favorite == 0){
+						$update_fav_query = "UPDATE favorites SET favorite=1 WHERE mid=".$mid." AND username='".$username."'"; 
+						$update_fav_response = mysqli_query($conn, $update_fav_query);
+						if($update_fav_response){
+							echo "<div class='container'><p class='text-success'>".$movie_title." favorited!</p></div>";
+						}
+					}
+					else if($favorite == 1){
+						$update_fav_query = "UPDATE favorites SET favorite=0 WHERE mid=".$mid." AND username='".$username."'"; 
+						$update_fav_response = mysqli_query($conn, $update_fav_query);
+						if($update_fav_response){
+							echo "<div class='container'><p class='text-success'>".$movie_title." unfavorited!</p></div>";
+						}
+					}
+				}
+			}
+			else{
+				echo "<div class='container'><p class='text-danger'>A problem has occurred!</p></div>";
+			}
+		}
+	}
+		
 		if(isset($_POST['add-movie'])){
 			if(empty($_POST['title']) || empty($_POST['year']) || empty($_POST['age_rating'])
 				|| empty($_POST['director']) || empty($_POST['runtime'])){
@@ -61,7 +102,12 @@
 				
 			}
 		}
-		
+?>	
+	<div class="container">
+		<h1>Movies</h1>
+		<a href="addmovie.php"><b>Add A Movie</b></a>
+	</div>
+<?php		
 		$query = "SELECT * FROM media m WHERE m.type='movie' GROUP BY m.mid ORDER BY year DESC";
 		
 		$response = mysqli_query($conn, $query);
@@ -81,7 +127,11 @@
 				<td align="left">' . $row['age_rating'] . '</td>
 				<td align="left">' . $row['director'] . '</td>
 				<td align="left">' . $row['services'] . '</td>
-				<td align="left"><a href=movies.php>Favorite</a></td><td align="left">';
+				<form action="movies.php" method="post">
+				<input type="hidden" name="title" value="'.$row["title"].'">
+				<input type="hidden" name="mid" value="'.$row["mid"].'">
+				<td align="left"><button type="submit" name="fav-movie" class="btn btn-link"><i>Favorite</i></button></td>
+				</form>';
 			}
 			echo '</tr></table></div>';
 		}

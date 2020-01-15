@@ -171,9 +171,8 @@
 			<form action="details.php?id=<?php echo $id ?>" method="post">
 				<input type="hidden" name="title" value="<?php echo $title ?>">
 				<input type="hidden" name="mid" value="<?php echo $id ?>">
-				<input type="hidden" name="username" value="rmoo">
 				<input type="hidden" name="type" value="<?php echo $type ?>">
-				<button type="submit" name="fav-media" class="btn btn-link"><b>Favorite</b></button>
+				<button type="submit" name="fav-media" class="btn btn-link"><i>Favorite</i></button>
 			</form>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -199,7 +198,7 @@
 ?>
 			<h4><?php echo 'Actors/Actresses: ' . $actors_str ?></h4>
 			<h6><?php echo $desc ?></h6>
-			<a href="edit.php?id=<?php echo $id ?>&type=<?php echo $type ?>"><b>Edit details</b></a> <!-- work on this portion -->
+			<a href="editmedia.php?id=<?php echo $id ?>&type=<?php echo $type ?>"><b>Edit details</b></a> <!-- work on this portion -->
 		</div>
 	</div>
 </div>
