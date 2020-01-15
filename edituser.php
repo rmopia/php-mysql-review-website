@@ -8,37 +8,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
-<body>
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="home.php">Review It</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="television.php">TV</a></li>
-	  <li><a href="movies.php">Movies</a></li>
-	  <li><a href="contact.php">Contact</a></li>
-	  <li><a href="login.php">Login</a></li>
-	  <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Account
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		  <a class="dropdown-item" href="#">Profile</a>
-          <a class="dropdown-item" href="edituser.php?username=<?php echo $username ?>">Edit Account</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="logout.php">Logout</a>
-        </div>
-      </li>
-	  <li><form action="search.php" class="form-inline my-2 my-lg-0" method="GET">
-			<input class="form-control mr-sm-2" name="t" type="search" placeholder="..." aria-label="Search">
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-		</form></li>
-    </ul>
-  </div>
-</nav>
 <?php
 	session_start();
+	include_once("navbar.php");
 
 	$servername = "localhost";
 	$username = "root";
@@ -59,7 +31,7 @@
 				$lname = $row['lname'];
 				$email = $row['email'];
 				$portrait = $row['portrait'];
-				$password = $row['password']; //encrypt this at some point // separate page for password changing
+				$password = $row['password']; //encrypt this at some point (SHA1) // separate page for password changing
 			}
 		}
 		
@@ -116,7 +88,7 @@
 				<label for="email">Email</label>
 				<input type="text" class="form-control" name="email" size="2" maxlength="255" value="<?php echo $email ?>" /><p></p>
 				<label for="password">Password</label>
-				<input type="password" class="form-control" name="password" size="2" maxlength="255" value="<?php echo $password ?>" /><p></p>
+				<input type="password" class="form-control" name="password" size="2" maxlength="255" value="" /><p></p>
 				<input type="submit" name="edit-user" class="btn btn-primary" value="Save"><p></p>
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
