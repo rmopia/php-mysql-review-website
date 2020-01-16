@@ -72,6 +72,8 @@
 					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				}
 			else{
+				$genres = $_POST['genres'];
+				
 				$add_movie_query = "INSERT INTO media (title, year, age_rating, director, runtime, services, description, type) 
 				VALUES (?,?,?,?,?,?,?,'movie')";
 				
@@ -80,6 +82,23 @@
 				$_POST['director'], $_POST['runtime'], $_POST['services'], $_POST['description']);
 				mysqli_stmt_execute($add_movie);
 				
+				// if the moderator includes genres to the movie
+				if(!empty($genres)){
+					$get_mid_q = "SELECT mid FROM media WHERE title='".$_POST['title']."' AND year=".$_POST['year']."";
+					$get_mid_response = mysqli_query($conn, $get_mid_q);
+					if($get_mid_response){
+						$row = mysqli_fetch_array($get_mid_response);
+						$mid = $row['mid'];
+					}
+					foreach ($genres as $genre){
+						$add_genre_q = "INSERT INTO media_genres (gid, mid) VALUES (".$genre.",".$mid.")"; 
+						$add_genre_response = mysqli_query($conn, $add_genre_q);
+					}
+					echo "<div class='container'><p class='text-success'>Movie added!</p></div>";
+				}
+				else{
+					echo "<div class='container'><p class='text-success'>Movie added!</p></div>";
+				}	
 			}
 		}
 		
