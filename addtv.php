@@ -34,8 +34,24 @@
 					<label for="description">Description</label>
 					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"></textarea>
 					<p></p>
-					<input type="submit" name="add-show" class="btn btn-primary" value="Add Show">
 					<p></p>
+				</div>
+				<div class="col-xs-3">
+					<label for="genres">Genre(s)</label>
+					<select class="form-control" multiple name="genres[]">
+					  <option value="" disabled selected></option>
+					  <option value="1">Western</option>
+					  <option value="2">Science Fiction</option>
+					  <option value="3">Action</option>
+					  <option value="4">Animation</option>
+					  <option value="5">Comedy</option>
+					  <option value="6">Adventure</option>
+					  <option value="7">Fantasy</option>
+					  <option value="8">Anime</option>
+					  <option value="9">Drama</option>
+					</select>
+					<p></p>
+					<input type="submit" name="add-show" class="btn btn-primary" value="Add Show">
 				</div>
 			</form>
 		</div>

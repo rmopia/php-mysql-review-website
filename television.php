@@ -20,6 +20,53 @@
 		
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
+		
+		if(isset($_POST['fav-show'])){
+			$username = $_SESSION['username'];
+			$mid = $_POST['mid'];
+			$tv_title = $_POST['title'];
+			
+			if(empty($username) || empty($mid)){
+				echo "<div class='container'><p class='text-danger'>A problem has occurred.</p></div>";
+			}
+			else{
+				$fav_query = "SELECT * FROM favorites WHERE username='".$username."' AND mid='".$mid."'";
+				$fav_response = mysqli_query($conn, $fav_query);
+				if($fav_response){
+					$row = mysqli_fetch_array($fav_response);
+					$favorite = $row['favorite'];
+					
+					if(empty($row['favorite']) && empty($row['mid']) && empty($row['username'])){
+						$insert_fav_q = "INSERT INTO favorites (mid, username, favorite) VALUES (?,?,1)"; 
+						// if new insert then assumed user wants to favorite movie/tv show 0 -> 1
+						$insert_fav = mysqli_prepare($conn, $insert_fav_q);
+						mysqli_stmt_bind_param($insert_fav, "is", $mid, $username);
+						mysqli_stmt_execute($insert_fav);
+						
+						echo "<div class='container'><p class='text-success'>".$tv_title." favorited!</p></div>";
+					}
+					else{
+						if($favorite == 0){
+							$update_fav_query = "UPDATE favorites SET favorite=1 WHERE mid=".$mid." AND username='".$username."'"; 
+							$update_fav_response = mysqli_query($conn, $update_fav_query);
+							if($update_fav_response){
+								echo "<div class='container'><p class='text-success'>".$tv_title." favorited!</p></div>";
+							}
+						}
+						else if($favorite == 1){
+							$update_fav_query = "UPDATE favorites SET favorite=0 WHERE mid=".$mid." AND username='".$username."'"; 
+							$update_fav_response = mysqli_query($conn, $update_fav_query);
+							if($update_fav_response){
+								echo "<div class='container'><p class='text-success'>".$tv_title." unfavorited!</p></div>";
+							}
+						}
+					}
+				}
+				else{
+					echo "<div class='container'><p class='text-danger'>A problem has occurred!</p></div>";
+				}
+			}
+		}
 ?>
 
 <div class="container">
@@ -30,10 +77,12 @@
 <?php
 		if(isset($_POST['add-show'])){
 			if(empty($_POST['title']) || empty($_POST['year']) || empty($_POST['age_rating'])
-				|| empty($_POST['director']) || empty($_POST['seasons']) || empty($_POST['episodes'])){
+				|| empty($_POST['seasons']) || empty($_POST['episodes'])){
 					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				}
 			else{
+				$genres = $_POST['genres'];
+				
 				$add_show_query = "INSERT INTO media (title, year, age_rating, director, seasons, episodes, services, description, type) 
 				VALUES (?,?,?,?,?,?,?,?,'tv')";
 				
@@ -42,6 +91,23 @@
 					$_POST['director'], $_POST['seasons'], $_POST['episodes'], $_POST['services'], $_POST['description']);
 				mysqli_stmt_execute($add_show);
 				
+				// if the moderator includes genres to the movie
+				if(!empty($genres)){
+					$get_mid_q = "SELECT mid FROM media WHERE title='".$_POST['title']."' AND year=".$_POST['year']."";
+					$get_mid_response = mysqli_query($conn, $get_mid_q);
+					if($get_mid_response){
+						$row = mysqli_fetch_array($get_mid_response);
+						$mid = $row['mid'];
+					}
+					foreach ($genres as $genre){
+						$add_genre_q = "INSERT INTO media_genres (gid, mid) VALUES (".$genre.",".$mid.")"; 
+						$add_genre_response = mysqli_query($conn, $add_genre_q);
+					}
+					echo "<div class='container'><p class='text-success'>TV Show added!</p></div>";
+				}
+				else{
+					echo "<div class='container'><p class='text-success'>TV Show added!</p></div>";
+				}	
 			}
 		}
 		
@@ -84,7 +150,12 @@
 				<td align="left">' . $row['episodes'] . '</td>
 				<td align="left">' . $row['age_rating'] . '</td>
 				<td align="left">' . $row['director'] . '</td>
-				<td align="left">' . $row['services'] . '</td><td align="left">';
+				<td align="left">' . $row['services'] . '</td>
+				<form action="television.php" method="post">
+				<input type="hidden" name="title" value="'.$row["title"].'">
+				<input type="hidden" name="mid" value="'.$row["mid"].'">
+				<td align="left"><button type="submit" name="fav-show" class="btn btn-link"><i>Favorite</i></button></td>
+				</form>';
 			}
 			echo '</tr></table></div>';
 		}
