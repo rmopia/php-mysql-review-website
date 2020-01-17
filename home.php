@@ -23,23 +23,38 @@
 		
 		
 		if(isset($_POST['edit-user'])){
+			$username = $_POST['username'];
 			$profile_pic = $_POST['profile_pic'];
 			$fname = $_POST['fname'];
 			$lname = $_POST['lname'];
 			$email = $_POST['email'];
 			$password = $_POST['password'];
+			
+			$pw_q = "SELECT password FROM reviewers WHERE username='".$username."'";
+			$pw_response = mysqli_query($conn, $pw_q);	
+			if($pw_response){
+				while($row = mysqli_fetch_array($pw_response)){
+					$sql_pw = $row['password'];
+				}
+			}
 		
-			if(empty($password)){ //add validator to compare password input and mysql stored password 
+			if(empty($password)){ 
 				$message = "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				header('Location: login.php?message='.$message);
 				die;
 			}
-			else{
-				$edit_user_query = "UPDATE reviewers SET fname=?, lname=?, email=?, portrait=? WHERE username='".$_POST['username']."'";
-			
+			else if($sql_pw == sha1($password)){
+				$edit_user_query = "UPDATE reviewers SET fname=?, lname=?, email=?, portrait=? WHERE username='".$_POST['username']."' AND 
+				password=SHA1('".$password."')";
+				
+				$message = "<div class='container'><p class='text-success'>User updated!</p></div>";
+				
 				$update_user = mysqli_prepare($conn, $edit_user_query);
 				mysqli_stmt_bind_param($update_user, "sssb", $fname, $lname, $email, $profile_pic);
 				mysqli_stmt_execute($update_user);
+			}
+			else{
+				$message = "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 			}
 		}
 		
@@ -91,7 +106,7 @@
 				die;
 			}
 			else{
-				$login_query = "SELECT * FROM reviewers WHERE username='".$user."' and password='".$pw."'";
+				$login_query = "SELECT * FROM reviewers WHERE username='".$user."' and password=SHA1('".$pw."')";
 				$login_response = mysqli_query($conn, $login_query);
 				if($login_response){
 					$row = mysqli_fetch_array($login_response);

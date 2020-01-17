@@ -31,16 +31,16 @@
 				$lname = $row['lname'];
 				$email = $row['email'];
 				$portrait = $row['portrait'];
-				$password = $row['password']; //encrypt this at some point (SHA1) // separate page for password changing
+				$password = $row['password'];
 			}
 		}
 		
 	}
 	if(isset($_POST['change-user-pw'])){
 		$username = $_POST['username'];
-		$oldpw1 = $_POST['oldpw1'];
-		$oldpw2 = $_POST['oldpw2'];
-		$newpw = $_POST['newpw'];
+		$oldpw1 = sha1($_POST['oldpw1']);
+		$oldpw2 = sha1($_POST['oldpw2']);
+		$newpw = sha1($_POST['newpw']);
 		
 		if(!empty($oldpw1) && !empty($oldpw2) && !empty($newpw)){
 			$pw_query = "SELECT password FROM reviewers WHERE username = '".$username."'";

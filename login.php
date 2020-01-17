@@ -47,7 +47,7 @@
 		else{
 			if($password == $password2){
 				$insert_user_query = "INSERT INTO reviewers (username, fname, lname, email, password) 
-				VALUES (?,?,?,?,?)"; 
+				VALUES (?,?,?,?,SHA1(?))"; 
 			
 				$insert_user = mysqli_prepare($conn, $insert_user_query);
 				mysqli_stmt_bind_param($insert_user, "sssss", $username, $fname, $lname, $email, $password);

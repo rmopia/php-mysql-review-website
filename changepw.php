@@ -26,7 +26,7 @@
 ?>
 <div class="container">
 	<h1>Change Password</h1>
-	<form action="edituser.php?username=rmoo" method="post">
+	<form action="edituser.php?username=<?php echo $username ?>" method="post">
 		<div class="row">
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 				<input type="hidden" name="username" value="<?php echo $username ?>" />
