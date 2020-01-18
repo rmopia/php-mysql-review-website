@@ -10,9 +10,6 @@
 </head>
 <?php
 		session_start();
-		if($_SESSION['loggedin'] == 1){
-			$message = "<div class='container'>Logged in as ".$_SESSION['username']."</div>";
-		}
 
 		$servername = "localhost";
 		$password = "pwdpwd";
@@ -58,6 +55,7 @@
 			}
 		}
 		
+		// add chance to remove reviews of said user to resolve conflicts
 		if(isset($_POST['delete-user-confirm'])){
 			$user = $_POST['username'];
 			$pw1 = $_POST['pw1'];
@@ -67,17 +65,29 @@
 			$pw1 = stripcslashes($pw1);
 			$pw2 = stripcslashes($pw2);
 			
-			if(empty($pw1) || empty($pw2) || empty($user)){ //add validator to compare password input and mysql stored password 
+			$pw1 = sha1($pw1);
+			$pw2 = sha1($pw2);
+			
+			$pw_query = "SELECT password FROM reviewers WHERE username='".$user."'";
+			$pw_response = mysqli_query($conn, $pw_query);	
+			if($pw_response){
+				while($row = mysqli_fetch_array($pw_response)){
+					$mysql_pw = $row['password'];
+				}
+			}
+			
+			if(empty($pw1) || empty($pw2) || empty($user)){
 				$message = "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				header('Location: login.php?message='.$message);
 				die;
 			}
-			else if($pw1 == $pw2){
+			else if(($pw1 == $pw2) && ($pw1 == $mysql_pw) && ($pw2 == $mysql_pw)){
 				$password = $pw1;
 				$del_user_query = "DELETE FROM reviewers WHERE password='".$password."' AND username='".$user."'";
 				$del_user_response = mysqli_query($conn, $del_user_query);
 				
 				if($del_user_response){
+					session_destroy();
 					echo "<div class='container'><p class='text-success'>User deleted. Farewell.</p></div>";
 				}
 				else if(!$del_user_response){
@@ -123,6 +133,12 @@
 						$message = "<div class='container'><p class='text-success'>Successful login. Welcome ".$username.".</p></div>";
 					}
 				}
+			}
+		}
+		
+		if(isset($_SESSION['username'])){
+			if($_SESSION['loggedin'] == 1){
+				$message = "<div class='container'>Logged in as ".$_SESSION['username']."</div>";
 			}
 		}
 

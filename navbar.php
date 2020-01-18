@@ -13,8 +13,8 @@
           Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		  <a class="dropdown-item" href="profile.php?username=<?php echo $_SESSION['username'] ?>">Profile</a>
-          <a class="dropdown-item" href="edituser.php?username=<?php echo $_SESSION['username'] ?>">Edit Account</a>
+		  <a class="dropdown-item" href="profile.php">My Profile</a>
+          <a class="dropdown-item" href="edituser.php">Edit Account</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="logout.php">Logout</a>
         </div>

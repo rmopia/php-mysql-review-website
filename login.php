@@ -53,7 +53,7 @@
 				mysqli_stmt_bind_param($insert_user, "sssss", $username, $fname, $lname, $email, $password);
 				mysqli_stmt_execute($insert_user);
 				
-				echo "<div class='container'><p class='text-success'>Account created!</p></div>";
+				echo "<div class='container'><p class='text-success'>Account created! Please login to proceed.</p></div>";
 			}
 			else{
 				echo "<div class='container'><p class='text-danger'>Passwords didn't match. Please try again.</p></div>";

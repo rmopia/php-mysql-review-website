@@ -21,7 +21,7 @@
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
-		if(isset($_POST['fav-show'])){
+		if(isset($_POST['fav-show']) && !empty($_SESSION['username'])){
 			$username = $_SESSION['username'];
 			$mid = $_POST['mid'];
 			$tv_title = $_POST['title'];
@@ -63,10 +63,11 @@
 					}
 				}
 				else{
-					echo "<div class='container'><p class='text-danger'>A problem has occurred!</p></div>";
+					echo "<div class='container'><p class='text-danger'>A problem has occurred.</p></div>";
 				}
 			}
 		}
+		
 ?>
 
 <div class="container">

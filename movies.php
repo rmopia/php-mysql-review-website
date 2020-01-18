@@ -19,7 +19,7 @@
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 
-	if(isset($_POST['fav-movie'])){
+	if(isset($_POST['fav-movie']) && !empty($_SESSION['username'])){
 		$username = $_SESSION['username'];
 		$mid = $_POST['mid'];
 		$movie_title = $_POST['title'];

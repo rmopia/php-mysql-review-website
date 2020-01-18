@@ -11,6 +11,10 @@
 <?php
 	session_start();
 	include_once("navbar.php");
+	
+	if(!empty($_SESSION['username'])){
+		$message = "<div class='container'><b class='text-warning'>You are already logged in. Logout to proceed.</b></div>";
+	}
 
 	$servername = "localhost";
 	$username = "root";

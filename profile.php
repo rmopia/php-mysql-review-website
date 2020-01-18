@@ -19,8 +19,8 @@
 	$conn = new mysqli($servername, "root", $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 	
-	if(isset($_GET['username'])){
-		$username = $_GET['username'];
+	if(isset($_SESSION['username']) && $_SESSION['loggedin'] == 1){
+		$username = $_SESSION['username'];
 		
 		$info_query = 'SELECT * FROM reviewers WHERE username="'.$username.'"';
 		$info_response = mysqli_query($conn, $info_query);
@@ -32,14 +32,17 @@
 				$portrait = $row['portrait'];
 			}
 		}
-		
+	}
+	else{
+		$message = "<div class='container'><p class='text-danger'>Currently not logged in.</p></div>";
+		header("Location: home.php?message=".$message);
 	}
 	
 ?>
 
 <div class="container">
 	<h1>Profile</h1>
-	<a href="edituser.php?username=<?php echo $username ?>"><b>Edit Profile</b></a><br />
+	<a href="edituser.php"><b>Edit Profile</b></a><br />
 		<div class="row">
 			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 				<label>Username</label>

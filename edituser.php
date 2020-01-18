@@ -13,15 +13,14 @@
 	include_once("navbar.php");
 
 	$servername = "localhost";
-	$username = "root";
 	$password = "pwdpwd";
 	$dbname = "review_site";
 	
-	$conn = new mysqli($servername, $username, $password, $dbname);
+	$conn = new mysqli($servername, "root", $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 	
-	if(isset($_GET['username'])){
-		$username = $_GET['username'];
+	if(isset($_SESSION['username']) && $_SESSION['loggedin'] == 1){
+		$username = $_SESSION['username'];
 		
 		$info_query = 'SELECT * FROM reviewers WHERE username="'.$username.'"';
 		$info_response = mysqli_query($conn, $info_query);
@@ -33,9 +32,13 @@
 				$portrait = $row['portrait'];
 				$password = $row['password'];
 			}
-		}
-		
+		}	
 	}
+	else{
+		$message = "<div class='container'><p class='text-danger'>Currently not logged in.</p></div>";
+		header("Location: home.php?message=".$message);
+	}
+	
 	if(isset($_POST['change-user-pw'])){
 		$username = $_POST['username'];
 		$oldpw1 = sha1($_POST['oldpw1']);
