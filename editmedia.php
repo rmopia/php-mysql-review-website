@@ -40,6 +40,14 @@
 					$services = $row['services'];
 				}
 			}
+			$genre_q = "SELECT gid FROM media_genres WHERE mid=".$id;
+			$genre_response = mysqli_query($conn, $edit_query);
+			if($genre_response){
+				$genres = array();
+				while($row = mysqli_fetch_array($genre_response)){
+					echo $row['gid']; //TODO: FIX
+				}
+			}
 	?>
 			<form action="television.php" method="post">
 				<div class="col-xs-4">
@@ -63,6 +71,23 @@
 					<p></p>
 					<input type="submit" name="edit-show" class="btn btn-primary" value="Finish">
 					<p></p>
+				</div>
+				<div class="col-xs-4">
+					<label for="genres">Genre(s)</label>
+					<select class="form-control" multiple name="genres[]">
+					  <option value="" disabled selected></option>
+					  <option value="1" selected="selected">Western</option>
+					  <option value="2">Science Fiction</option>
+					  <option value="3">Action</option>
+					  <option value="4">Animation</option>
+					  <option value="5">Comedy</option>
+					  <option value="6">Adventure</option>
+					  <option value="7">Fantasy</option>
+					  <option value="8">Anime</option>
+					  <option value="9">Drama</option>
+					</select>
+					<p></p>
+					<input type="submit" name="add-movie" class="btn btn-primary" value="Add Movie">
 				</div>
 			</form>
 		<?php } 
@@ -94,7 +119,7 @@
 					<input type="text" class="form-control" name="age_rating" size="28" maxlength="10" value="<?php echo $age_rating ?>"/><p></p>
 					<label for="director">Director</label>
 					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="<?php echo $director ?>" /><p></p>
-					<label for="seasons">runtime</label>
+					<label for="seasons">Runtime (minutes)</label>
 					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value="<?php echo $runtime ?>"/><p></p>
 					<label for="episodes">Services (Where the movie is available)</label>
 					<input type="text" class="form-control" name="services" size="28" maxlength="50" value="<?php echo $services ?>"/><p></p>

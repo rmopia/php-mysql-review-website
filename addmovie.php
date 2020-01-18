@@ -25,7 +25,7 @@
 					<input type="text" class="form-control" name="age_rating" size="28" maxlength="10" value=""/><p></p>
 					<label for="director">Director</label>
 					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="" /><p></p>
-					<label for="seasons">runtime</label>
+					<label for="seasons">Runtime (minutes)</label>
 					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value=""/><p></p>
 					<label for="episodes">Services (Where the movie is available)</label>
 					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
@@ -48,6 +48,12 @@
 					  <option value="8">Anime</option>
 					  <option value="9">Drama</option>
 					</select>
+					<p></p>
+				</div>
+				<div class="col-xs-4">
+					<label for="actors">Actors/Actresses</label>
+					<p>Please separate each actor/actress with a comma:</p>
+					<textarea class="form-control" type="text" name="actors" value="" rows="4" cols="40"></textarea>
 					<p></p>
 					<input type="submit" name="add-movie" class="btn btn-primary" value="Add Movie">
 				</div>

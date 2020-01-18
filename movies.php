@@ -19,13 +19,13 @@
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 
-	if(isset($_POST['fav-movie']) && !empty($_SESSION['username'])){
+	if(isset($_POST['fav-movie'])){
 		$username = $_SESSION['username'];
 		$mid = $_POST['mid'];
 		$movie_title = $_POST['title'];
 		
 		if(empty($username) || empty($mid)){
-			echo "<div class='container'><p class='text-danger'>A problem has occurred.</p></div>";
+			echo "<div class='container'><p class='text-danger'>A problem has occurred. Please login.</p></div>";
 		}
 		else{
 			$fav_query = "SELECT * FROM favorites WHERE username='".$username."' AND mid='".$mid."'";
@@ -73,6 +73,7 @@
 				}
 			else{
 				$genres = $_POST['genres'];
+				$actors_raw = $_POST['actors'];
 				
 				$add_movie_query = "INSERT INTO media (title, year, age_rating, director, runtime, services, description, type) 
 				VALUES (?,?,?,?,?,?,?,'movie')";
@@ -82,25 +83,55 @@
 				$_POST['director'], $_POST['runtime'], $_POST['services'], $_POST['description']);
 				mysqli_stmt_execute($add_movie);
 				
-				// if the moderator includes genres to the movie
-				if(!empty($genres)){
-					$get_mid_q = "SELECT mid FROM media WHERE title='".$_POST['title']."' AND year=".$_POST['year']."";
+				$get_mid_q = "SELECT mid FROM media WHERE title='".$_POST['title']."' AND year=".$_POST['year']."";
 					$get_mid_response = mysqli_query($conn, $get_mid_q);
 					if($get_mid_response){
 						$row = mysqli_fetch_array($get_mid_response);
 						$mid = $row['mid'];
 					}
+				
+				// if the moderator includes genres to the movie
+				if(!empty($genres)){
 					foreach ($genres as $genre){
 						$add_genre_q = "INSERT INTO media_genres (gid, mid) VALUES (".$genre.",".$mid.")"; 
 						$add_genre_response = mysqli_query($conn, $add_genre_q);
+					}
+				}
+				if(!empty($actors_raw)){
+					$actors = explode(",", $actors_raw); //string input into an array
+					
+					foreach($actors as $actor){
+						$new_actor = trim($actor);
+						$actors_list = "SELECT * FROM actors WHERE actor='".$new_actor."'"; //compare actors to any already in database
+						$actor_list_resp = mysqli_query($conn, $actors_list);
+						if($actor_list_resp){
+							$row = mysqli_fetch_array($actor_list_resp);
+							$a_id = $row['aid'];
+							if(empty($a_id)){ // actor doesn't exist
+								$add_actor_q = "INSERT INTO actors (actor) VALUES ('".$new_actor."')"; //must add if doesn't exist then link to mid
+								$add_actor_resp = mysqli_query($conn, $add_actor_q);	
+							}
+							// else do nothing if actor exists
+						}
+						
+						// Must get aid for media_actors table
+						$get_aid_q = "SELECT aid FROM actors WHERE actor='".$new_actor."'";
+						$get_aid_response = mysqli_query($conn, $get_aid_q);
+						if($get_aid_response){
+							$row = mysqli_fetch_array($get_aid_response);
+							$aid = $row['aid'];
+						}
+						
+						$link_to_mid = "INSERT INTO media_actors (aid, mid) VALUES (".$aid.",".$mid.")";
+						$link_response = mysqli_query($conn, $link_to_mid);
 					}
 					echo "<div class='container'><p class='text-success'>Movie added!</p></div>";
 				}
 				else{
 					echo "<div class='container'><p class='text-success'>Movie added!</p></div>";
+				}
 				}	
 			}
-		}
 		
 		if(isset($_POST['edit-movie'])){
 			if(empty($_POST['title']) || empty($_POST['year'])){

@@ -21,13 +21,13 @@
 		$conn = new mysqli($servername, $username, $password, $dbname);
 		$conn->select_db($dbname) or die("Unable to connect to database."); 
 		
-		if(isset($_POST['fav-show']) && !empty($_SESSION['username'])){
+		if(isset($_POST['fav-show'])){
 			$username = $_SESSION['username'];
 			$mid = $_POST['mid'];
 			$tv_title = $_POST['title'];
 			
 			if(empty($username) || empty($mid)){
-				echo "<div class='container'><p class='text-danger'>A problem has occurred.</p></div>";
+				echo "<div class='container'><p class='text-danger'>A problem has occurred. Please login.</p></div>";
 			}
 			else{
 				$fav_query = "SELECT * FROM favorites WHERE username='".$username."' AND mid='".$mid."'";
