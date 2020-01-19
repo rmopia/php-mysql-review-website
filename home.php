@@ -150,12 +150,22 @@
 		else if(!empty($message)){
 			echo $message;
 		} 
+		
+	$queue = new SplQueue();
+	$queue->enqueue('https://www.youtube.com/embed/3iXeAwsGhV0');
+	$queue->enqueue('https://www.youtube.com/embed/3iXeAwsGhV0');
+	$queue->enqueue('https://www.youtube.com/embed/3iXeAwsGhV0');
+	
 ?>
 <div class="container">
 	<h1>Home</h1>
-	<div class="embed-responsive embed-responsive-16by9">
-		<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/3iXeAwsGhV0" allowfullscreen></iframe>
-	</div>
+	<?php
+	while(sizeof($queue) != 0){
+		$video = $queue->dequeue();
+		echo '<div class="embed-responsive embed-responsive-16by9">'.
+		'<iframe class="embed-responsive-item" src="'.$video.'" allowfullscreen></iframe></div>';
+	}
+	?>
 </div>
 <p></p>
 <?php
