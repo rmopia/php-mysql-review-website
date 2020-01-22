@@ -21,8 +21,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		  <a class="dropdown-item" href="profile.php">My Profile</a>
+		  <br/>
           <a class="dropdown-item" href="edituser.php">Edit Account</a>
-          <div class="dropdown-divider"></div>
+          <br/>
           <a class="dropdown-item" href="logout.php">Logout</a>
         </div>
       </li>

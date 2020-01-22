@@ -30,7 +30,22 @@
 					<label for="episodes">Episodes (Total)</label>
 					<input type="number" class="form-control" name="episodes" size="28" maxlength="10" value=""/><p></p>
 					<label for="services">Services (Where the show is available)</label>
-					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
+					<select class="form-control" multiple name="services[]">
+					  <option value="None" selected></option>
+					  <option value="Netflix">Netflix</option>
+					  <option value="Disney+">Disney+</option>
+					  <option value="Hulu">Hulu</option>
+					  <option value="Amazon Prime Video">Amazon Prime Video</option>
+					  <option value="HBO">HBO</option>
+					  <option value="Crackle">Crackle</option>
+					  <option value="Sling TV">Sling TV</option>
+					  <option value="In Theatres">In Theatres</option>
+					  <option value="Crunchyroll">Crunchyroll</option>
+					  <option value="Funimation now">Funimation now</option>
+					  <option value="VRV">VRV</option>
+					  <option value="Youtube">Youtube</option>
+					</select>
+					<p></p>
 					<label for="description">Description</label>
 					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"></textarea>
 					<p></p>

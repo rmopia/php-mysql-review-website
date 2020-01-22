@@ -82,6 +82,18 @@
 					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				}
 			else{
+				$services = $_POST['services'];
+				$services_str = implode(", ",$services);
+				
+				if(!empty($services)){
+					foreach ($services as $service){
+						if($service == 'None'){
+							$services_str = '';
+							break;
+						}
+					}
+				}
+				
 				$genres = $_POST['genres'];
 				
 				$add_show_query = "INSERT INTO media (title, year, age_rating, director, seasons, episodes, services, description, type) 
@@ -89,7 +101,7 @@
 				
 				$add_show = mysqli_prepare($conn, $add_show_query);
 				mysqli_stmt_bind_param($add_show, "sissiiss", $_POST['title'], $_POST['year'], $_POST['age_rating'],
-					$_POST['director'], $_POST['seasons'], $_POST['episodes'], $_POST['services'], $_POST['description']);
+					$_POST['director'], $_POST['seasons'], $_POST['episodes'], $services_str, $_POST['description']);
 				mysqli_stmt_execute($add_show);
 				
 				// if the moderator includes genres to the movie
@@ -134,7 +146,7 @@
 		$query = "SELECT * FROM media m WHERE m.type='tv' GROUP BY m.mid ORDER BY year DESC";
 		
 		$response = mysqli_query($conn, $query);
-		if($response){
+		if($response && !empty($_SESSION['username'])){
 			echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
 			<th scope="col">Title</th>
 			<th scope="col">Year</th>
@@ -161,7 +173,26 @@
 			echo '</tr></table></div>';
 		}
 		else{
-			echo "problem";
+			echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
+			<th scope="col">Title</th>
+			<th scope="col">Year</th>
+			<th scope="col">Seasons</th>
+			<th scope="col">Episodes (total)</th>
+			<th scope="col">Age Rating</th>
+			<th scope="col">Director</th>
+			<th scope="col">Services</th></tr></thead>';
+			
+			while($row = mysqli_fetch_array($response)){
+				echo '<tr><td align="left"><a href="details.php?id='.$row['mid'].'">' . $row['title'] . '</a></td> 
+				<td align="left">' . $row['year'] . '</td>
+				<td align="left">' . $row['seasons'] . '</td>
+				<td align="left">' . $row['episodes'] . '</td>
+				<td align="left">' . $row['age_rating'] . '</td>
+				<td align="left">' . $row['director'] . '</td>
+				<td align="left">' . $row['services'] . '</td>
+				<td align="left"><button type="submit" name="fav-show" class="btn btn-link" disabled><i>Favorite</i></button></td>';
+			}
+			echo '</tr></table></div>';
 		}
 		
 		mysqli_close($conn);

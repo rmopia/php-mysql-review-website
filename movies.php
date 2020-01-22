@@ -170,11 +170,12 @@
 		<h1>Movies</h1>
 		<a href="addmovie.php"><b>Add A Movie</b></a>
 	</div>
-<?php		
+<?php	
+	
 		$query = "SELECT * FROM media m WHERE m.type='movie' GROUP BY m.mid ORDER BY year DESC";
 		
 		$response = mysqli_query($conn, $query);
-		if($response){
+		if($response && !empty($_SESSION['username'])){
 			echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
 			<th scope="col">Title</th>
 			<th scope="col">Year</th>
@@ -199,7 +200,24 @@
 			echo '</tr></table></div>';
 		}
 		else{
-			echo "problem";
+			echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
+			<th scope="col">Title</th>
+			<th scope="col">Year</th>
+			<th scope="col">Runtime (mins)</th>
+			<th scope="col">Age Rating</th>
+			<th scope="col">Director</th>
+			<th scope="col">Services</th></tr></thead>';
+			
+			while($row = mysqli_fetch_array($response)){
+				echo '<tr><td align="left"><a href="details.php?id='.$row['mid'].'">' . $row['title'] . '</a></td> 
+				<td align="left">' . $row['year'] . '</td>
+				<td align="left">' . $row['runtime'] . '</td>
+				<td align="left">' . $row['age_rating'] . '</td>
+				<td align="left">' . $row['director'] . '</td>
+				<td align="left">' . $row['services'] . '</td>
+				<td align="left"><button type="submit" name="fav-movie" class="btn btn-link" disabled><i>Favorite</i></button></td>';
+			}
+			echo '</tr></table></div>';
 		}
 		
 		mysqli_close($conn);
