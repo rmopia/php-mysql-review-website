@@ -63,7 +63,8 @@
 					<td align="left">' . $row['score'] . '</td>
 					<td align="left">' . $row['review'] . '</td>
 					<td align="left">' . $row['date_posted'] . '</td>
-					<td align="left"><a href="delete.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
+					<td align="right"><a href="updatereview.php?id='.$row['mid'].'&user='.$row['username'].'">Update</td>
+					<td align="right"><a href="deletereview.php?id='.$row['mid'].'&user='.$row['username'].'">Delete</a></td><td align="left">';
 				}
 				echo '</tr></table></div>';
 			}

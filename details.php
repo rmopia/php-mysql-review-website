@@ -172,7 +172,14 @@
 				<input type="hidden" name="title" value="<?php echo $title ?>">
 				<input type="hidden" name="mid" value="<?php echo $id ?>">
 				<input type="hidden" name="type" value="<?php echo $type ?>">
-				<button type="submit" name="fav-media" class="btn btn-link"><i>Favorite</i></button>
+				<?php
+				if(empty($_SESSION['username'])){
+					echo '<button type="submit" class="btn btn-link" disabled><i>Favorite</i></button>';
+				}
+				else{
+					echo '<button type="submit" name="fav-media" class="btn btn-link"><i>Favorite</i></button>';
+				}
+				?>
 			</form>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
