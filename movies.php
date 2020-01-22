@@ -72,6 +72,19 @@
 					echo "<div class='container'><p class='text-danger'>Error: Required fields not filled out. Please try again.</p></div>";
 				}
 			else{
+				//Concatenate services into one string
+				$services = $_POST['services'];
+				$services_str = implode(", ",$services);
+				
+				if(!empty($services)){
+					foreach ($services as $service){
+						if($service == 'None'){
+							$services_str = '';
+							break;
+						}
+					}
+				}
+				
 				$genres = $_POST['genres'];
 				$actors_raw = $_POST['actors'];
 				
@@ -80,7 +93,7 @@
 				
 				$add_movie = mysqli_prepare($conn, $add_movie_query);
 				mysqli_stmt_bind_param($add_movie, "sississ", $_POST['title'], $_POST['year'], $_POST['age_rating'],
-				$_POST['director'], $_POST['runtime'], $_POST['services'], $_POST['description']);
+				$_POST['director'], $_POST['runtime'], $services_str, $_POST['description']);
 				mysqli_stmt_execute($add_movie);
 				
 				$get_mid_q = "SELECT mid FROM media WHERE title='".$_POST['title']."' AND year=".$_POST['year']."";

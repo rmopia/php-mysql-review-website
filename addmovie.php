@@ -27,8 +27,23 @@
 					<input type="text" class="form-control" name="director" size="2" maxlength="255" value="" /><p></p>
 					<label for="seasons">Runtime (minutes)</label>
 					<input type="number" class="form-control" name="runtime" size="28" maxlength="4" value=""/><p></p>
-					<label for="episodes">Services (Where the movie is available)</label>
-					<input type="text" class="form-control" name="services" size="28" maxlength="50" value=""/><p></p>
+					<label for="services">Services (Where the movie is available)</label>
+					<select class="form-control" multiple name="services[]">
+					  <option value="None" selected></option>
+					  <option value="Netflix">Netflix</option>
+					  <option value="Disney+">Disney+</option>
+					  <option value="Hulu">Hulu</option>
+					  <option value="Amazon Prime Video">Amazon Prime Video</option>
+					  <option value="HBO">HBO</option>
+					  <option value="Crackle">Crackle</option>
+					  <option value="Sling TV">Sling TV</option>
+					  <option value="In Theatres">In Theatres</option>
+					  <option value="Crunchyroll">Crunchyroll</option>
+					  <option value="Funimation now">Funimation now</option>
+					  <option value="VRV">VRV</option>
+					  <option value="Youtube">Youtube</option>
+					</select>
+					<p></p>
 					<label for="description">Description</label>
 					<textarea class="form-control" type="text" name="description" value="" rows="6" cols="40"></textarea>
 					<p></p>
