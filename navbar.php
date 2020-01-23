@@ -15,6 +15,7 @@
       <button type="search" class="btn btn-default">Search</button>
     </form>
 	<ul class="nav navbar-nav navbar-right">
+	  <li><a href="watchlist.php"><span class="glyphicon glyphicon-plus-sign"></span> Watchlist</a></li>
 	  <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		<span class="glyphicon glyphicon-user"></span> Account

@@ -19,7 +19,53 @@
 	$conn = new mysqli($servername, $username, $password, $dbname);
 	$conn->select_db($dbname) or die("Unable to connect to database."); 
 
-	if(isset($_POST['fav-movie'])){
+	if(isset($_POST['watch-movie'])){
+		$username = $_SESSION['username'];
+		$mid = $_POST['mid'];
+		$movie_title = $_POST['title'];
+		
+		if(empty($username) || empty($mid)){
+			echo "<div class='container'><p class='text-danger'>A problem has occurred. Please login.</p></div>";
+		}
+		else{
+			$w_query = "SELECT * FROM watchlist WHERE username='".$username."' AND mid='".$mid."'";
+			$w_response = mysqli_query($conn, $w_query);
+			if($w_response){
+				$row = mysqli_fetch_array($w_response);
+				$watch = $row['watch'];
+				
+				if(empty($row['watch']) && empty($row['mid']) && empty($row['username'])){
+					$insert_w_q = "INSERT INTO watchlist (mid, username, watch) VALUES (?,?,1)"; 
+					$insert_w = mysqli_prepare($conn, $insert_w_q);
+					mysqli_stmt_bind_param($insert_w, "is", $mid, $username);
+					mysqli_stmt_execute($insert_w);
+					
+					echo "<div class='container'><p class='text-success'>".$movie_title." added to watchlist!</p></div>";
+				}
+				else{
+					if($watch == 0){
+						$update_w_query = "UPDATE watchlist SET watch=1 WHERE mid=".$mid." AND username='".$username."'"; 
+						$update_w_response = mysqli_query($conn, $update_w_query);
+						if($update_w_response){
+							echo "<div class='container'><p class='text-success'>".$movie_title." added to watchlist!</p></div>";
+						}
+					}
+					else if($watch == 1){
+						$update_w_query = "UPDATE watchlist SET watch=0 WHERE mid=".$mid." AND username='".$username."'"; 
+						$update_w_response = mysqli_query($conn, $update_w_query);
+						if($update_w_response){
+							echo "<div class='container'><p class='text-success'>".$movie_title." removed from watchlist!</p></div>";
+						}
+					}
+				}
+			}
+			else{
+				echo "<div class='container'><p class='text-danger'>A problem has occurred!</p></div>";
+			}
+		}
+		
+	}
+	else if(isset($_POST['fav-movie'])){
 		$username = $_SESSION['username'];
 		$mid = $_POST['mid'];
 		$movie_title = $_POST['title'];
@@ -169,6 +215,7 @@
 	<div class="container">
 		<h1>Movies</h1>
 		<a href="addmovie.php"><b>Add A Movie</b></a>
+		<p></p>
 	</div>
 <?php	
 	
@@ -177,6 +224,7 @@
 		$response = mysqli_query($conn, $query);
 		if($response && !empty($_SESSION['username'])){
 			echo '<div class="container"><table class="table table-striped table-hover"><thead><tr>
+			<th scope="col"></th>
 			<th scope="col">Title</th>
 			<th scope="col">Year</th>
 			<th scope="col">Runtime (mins)</th>
@@ -185,7 +233,12 @@
 			<th scope="col">Services</th></tr></thead>';
 			
 			while($row = mysqli_fetch_array($response)){
-				echo '<tr><td align="left"><a href="details.php?id='.$row['mid'].'">' . $row['title'] . '</a></td> 
+				echo '<tr><form action="movies.php" method="post">
+				<input type="hidden" name="title" value="'.$row["title"].'">
+				<input type="hidden" name="mid" value="'.$row["mid"].'">
+				<td align="left"><button type="submit" name="watch-movie" class="btn btn-link"><span class="glyphicon glyphicon-plus"></span></button></td>
+				</form>
+				<td align="left"><a href="details.php?id='.$row['mid'].'">' . $row['title'] . '</a></td> 
 				<td align="left">' . $row['year'] . '</td>
 				<td align="left">' . $row['runtime'] . '</td>
 				<td align="left">' . $row['age_rating'] . '</td>
