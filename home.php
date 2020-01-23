@@ -1,3 +1,7 @@
+<?php
+//$API_key = 'AIzaSyBjvw6rKfO49MH2uQk_2b-HQvs__1NDvTw'; // later use
+//$channel_id = 'UCdCKdtuUexd1cncD6-2e4Fg';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -138,7 +142,7 @@
 		
 		if(isset($_SESSION['username'])){
 			if($_SESSION['loggedin'] == 1){
-				$message = "<div class='container'>Logged in as ".$_SESSION['username']."</div>";
+				$message = "<div class='container text-success'>Logged in as ".$_SESSION['username']."</div>";
 			}
 		}
 
@@ -152,9 +156,9 @@
 		} 
 		
 	$queue = new SplQueue();
+	$queue->enqueue('https://www.youtube.com/embed/1d6VuSA4zMA');
 	$queue->enqueue('https://www.youtube.com/embed/3iXeAwsGhV0');
-	$queue->enqueue('https://www.youtube.com/embed/3iXeAwsGhV0');
-	$queue->enqueue('https://www.youtube.com/embed/3iXeAwsGhV0');
+	$queue->enqueue('https://www.youtube.com/embed/SUVJuKZU9NE');
 	
 ?>
 <div class="container">
@@ -163,7 +167,7 @@
 	while(sizeof($queue) != 0){
 		$video = $queue->dequeue();
 		echo '<div class="embed-responsive embed-responsive-16by9">'.
-		'<iframe class="embed-responsive-item" src="'.$video.'" allowfullscreen></iframe></div>';
+		'<iframe class="embed-responsive-item" src="'.$video.'" allowfullscreen></iframe></div><br/>';
 	}
 	?>
 </div>
